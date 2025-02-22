@@ -1,7 +1,7 @@
 /* Общие стили */
 body {
     margin: 0;
-    padding: 0 3.5%; /* Отступы по бокам 3.5% от ширины экрана */
+    padding: 0; /* Убираем отступы по бокам */
     font-family: 'Inter', sans-serif;
     background-color: #f5f5f5;
     color: #000000;
@@ -13,7 +13,7 @@ body {
     margin: 0 auto;
     background-color: #ffffff;
     border-radius: 0 0 44px 44px;
-    padding: 0;
+    padding: 0; /* Убираем отступы внутри .app */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
@@ -30,14 +30,14 @@ body {
     height: 20px; /* Увеличиваем высоту header */
 }
 
-/* Добавляем отступы 3.5% по бокам для всех внутренних разделов */
+/* Убираем отступы по бокам для всех внутренних разделов */
 .logo,
 .group1,
 .content,
 .text1,
 .primeri,
 .about-section {
-    padding: 0 3.5%; /* Отступы по бокам 3.5% */
+    padding: 0; /* Убираем отступы по бокам */
 }
 
 /* Остальные стили остаются без изменений */
@@ -157,7 +157,7 @@ body {
 }
 
 .hidden-text {
-    padding: 0 3.5%; /* Отступы по бокам */
+    padding: 0; /* Убираем отступы по бокам */
     font-size: 14px;
     line-height: 1.5;
     color: #56595a;
@@ -258,7 +258,7 @@ body {
     font-size: 10px;
     color: #ffffff; /* Белый текст */
     background-color: #000000; /* Черный фон */
-    padding: 20px 3.5%; /* Внутренние отступы */
+    padding: 20px; /* Внутренние отступы */
     margin-top: 0; /* Убираем отступ сверху */
     margin-bottom: 0; /* Убираем отступ снизу */
     border-radius: 0 0 10px 10px; /* Закругленные углы */
