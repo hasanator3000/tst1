@@ -191,6 +191,17 @@
             </div>
             <!-- Виджет рейтинга Яндекс.Карт -->
             <a class="RatingBadgeWidget" target="_blank" href="//yandex.ru/maps/org/1349640743/reviews?utm_source=badge&amp;utm_medium=rating&amp;utm_campaign=v1" style="background-image:url(https://avatars.mds.yandex.net/get-altay/774406/badge_rating_dark_5.0/orig)"></a>
+
+            <!-- Ссылки на Instagram и Telegram -->
+            <div class="social-links">
+                <a href="https://www.instagram.com/koch24_service/" target="_blank">
+                    <img src="inst.svg" alt="Instagram" class="social-icon">
+                    <br>
+                </a>
+                <a href="https://t.me/obyasnitelnaya23" target="_blank">
+                    <img src="tg.svg" alt="Telegram" class="social-icon">
+                </a>
+            </div>
         </div>
 
         <!-- Футер -->
@@ -252,13 +263,13 @@
             </div>
 
             <!-- Шаг 4: Ввод данных -->
-<div id="step4" class="step" style="display: none;">
-    <h2>Введите ваши данные</h2>
-    <input type="text" id="clientName" placeholder="ФИО">
-    <input type="tel" id="clientPhone" placeholder="Номер телефона">
-    <input type="text" id="clientCarNumber" placeholder="Номер авто">
-    <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
-</div>
+            <div id="step4" class="step" style="display: none;">
+                <h2>Введите ваши данные</h2>
+                <input type="text" id="clientName" placeholder="ФИО" oninput="validateName(this)">
+                <input type="tel" id="clientPhone" placeholder="Номер телефона" oninput="formatPhone(this)">
+                <input type="text" id="clientCarNumber" placeholder="Номер авто">
+                <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
+            </div>
 
             <!-- Шаг 5: Успешная запись -->
             <div id="step5" class="step" style="display: none;">
