@@ -7,14 +7,14 @@ function toggleReadMore() {
 
     if (hiddenText.style.display === 'none') {
         hiddenText.style.display = 'block';
-        readFullButton.style.display = 'none'; // Скрываем кнопку "Читать полностью"
-        hideButton.style.display = 'block'; // Показываем кнопку "Скрыть"
-        gradientOverlay.style.display = 'none'; // Скрываем градиент
+        readFullButton.style.display = 'none';
+        hideButton.style.display = 'block';
+        gradientOverlay.style.display = 'none';
     } else {
         hiddenText.style.display = 'none';
-        readFullButton.style.display = 'block'; // Показываем кнопку "Читать полностью"
-        hideButton.style.display = 'none'; // Скрываем кнопку "Скрыть"
-        gradientOverlay.style.display = 'block'; // Показываем градиент
+        readFullButton.style.display = 'block';
+        hideButton.style.display = 'none';
+        gradientOverlay.style.display = 'block';
     }
 }
 
@@ -41,10 +41,9 @@ function showStep(step) {
     });
     document.getElementById(`step${step}`).style.display = 'flex';
 
-    // Если это шаг 4, вызываем валидацию и настраиваем обработчики
     if (step === 4) {
-        validateStep4(); // Проверяем поля сразу при показе шага
-        setupStep4Listeners(); // Настраиваем обработчики событий
+        validateStep4();
+        setupStep4Listeners();
     }
 }
 
@@ -63,7 +62,6 @@ function updateModels() {
     modelSelect.disabled = false;
     document.getElementById('next1').disabled = true;
 
-    // Добавляем обработчик выбора модели
     modelSelect.addEventListener('change', function() {
         if (modelSelect.value !== "") {
             document.getElementById('next1').disabled = false;
