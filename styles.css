@@ -261,6 +261,7 @@ body {
     padding: 20px; /* Внутренние отступы */
     margin-top: 0; /* Убираем отступ сверху */
     margin-bottom: 0; /* Убираем отступ снизу */
+    border-radius: 0 0 0 0;
 }
 
 .footer-left {
