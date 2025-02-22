@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Koch24 Детейлинг центр</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -196,7 +196,6 @@
             <div class="social-links">
                 <a href="https://www.instagram.com/koch24_service/" target="_blank">
                     <img src="inst.svg" alt="Instagram" class="social-icon">
-                    <br>
                 </a>
                 <a href="https://t.me/obyasnitelnaya23" target="_blank">
                     <img src="tg.svg" alt="Telegram" class="social-icon">
@@ -221,63 +220,86 @@
     </div>
 
     <!-- Модальное окно -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <!-- Крестик для закрытия модального окна -->
-            <div class="close-modal" onclick="closeModal()">×</div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <!-- Крестик для закрытия модального окна -->
+        <div class="close-modal" onclick="closeModal()">×</div>
 
-            <!-- Шаг 1: Выбор марки и модели -->
-            <div id="step1" class="step">
-                <h2>Выберите марку и модель автомобиля</h2>
-                <select id="brand" onchange="updateModels()">
-                    <option value="">Выберите марку</option>
-                    <option value="BMW">BMW</option>
-                    <option value="Porsche">Porsche</option>
-                </select>
-                <select id="model" disabled>
-                    <option value="">Выберите модель</option>
-                </select>
-                <button id="next1" disabled onclick="nextStep(2)">Подтвердить</button>
-            </div>
+        <!-- Кнопка "Назад" -->
+        <div class="back-button" onclick="prevStep()">←</div>
 
-            <!-- Шаг 2: Выбор услуг -->
-            <div id="step2" class="step" style="display: none;">
-                <h2>Выберите услуги</h2>
-                <label><input type="checkbox" name="service" value="2500" onchange="updateTotal()"> Мойка (2500₽)</label>
-                <label><input type="checkbox" name="service" value="3000" onchange="updateTotal()"> Тонировка (3000₽)</label>
-                <p>Подытог: <span id="total">0₽</span></p>
-                <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
-            </div>
+        <!-- Шаг 1: Выбор марки и модели -->
+        <div id="step1" class="step">
+            <h2>Выберите марку и модель автомобиля</h2>
+            <select id="brand" onchange="updateModels()">
+                <option value="">Выберите марку</option>
+                <option value="BMW">BMW</option>
+                <option value="Porsche">Porsche</option>
+            </select>
+            <select id="model" disabled>
+                <option value="">Выберите модель</option>
+            </select>
+            <button id="next1" disabled onclick="nextStep(2)">Подтвердить</button>
+        </div>
 
-            <!-- Шаг 3: Выбор времени -->
-            <div id="step3" class="step" style="display: none;">
-                <h2>Выберите время</h2>
-                <div class="time-slots">
-                    <div class="time-slot available" data-time="10:00">10:00</div>
-                    <div class="time-slot unavailable" data-time="11:00">11:00</div>
-                    <div class="time-slot available" data-time="12:00">12:00</div>
-                    <div class="time-slot unavailable" data-time="13:00">13:00</div>
-                    <div class="time-slot available" data-time="14:00">14:00</div>
-                </div>
-                <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
-            </div>
+        <!-- Шаг 2: Выбор услуг -->
+        <div id="step2" class="step" style="display: none;">
+            <h2>Выберите услуги</h2>
+            <label><input type="checkbox" name="service" value="2500" onchange="updateTotal()"> Мойка (2500₽)</label>
+            <label><input type="checkbox" name="service" value="3000" onchange="updateTotal()"> Тонировка (3000₽)</label>
+            <p>Подытог: <span id="total">0₽</span></p>
+            <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
+        </div>
 
-            <!-- Шаг 4: Ввод данных -->
-            <div id="step4" class="step" style="display: none;">
-                <h2>Введите ваши данные</h2>
-                <input type="text" id="clientName" placeholder="ФИО" oninput="validateName(this)">
-                <input type="tel" id="clientPhone" placeholder="Номер телефона" oninput="formatPhone(this)">
-                <input type="text" id="clientCarNumber" placeholder="Номер авто">
-                <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
-            </div>
+         <!-- Шаг 3: Выбор времени -->
+<div id="step3" class="step" style="display: none;">
+    <h2>Выберите время</h2>
+    
+    <!-- Меню выбора дня -->
+    <div class="day-selector">
+        <button class="day-button" onclick="changeDay(-1)">
+            <span class="triangle-left"></span> <!-- Левая стрелка -->
+        </button>
+        <span id="current-day" class="current-day"></span> <!-- Дата -->
+        <button class="day-button" onclick="changeDay(1)">
+            <span class="triangle-right"></span> <!-- Правая стрелка -->
+        </button>
+    </div>
 
-            <!-- Шаг 5: Успешная запись -->
-            <div id="step5" class="step" style="display: none;">
-                <h2>Вы успешно записались!</h2>
-                <button onclick="closeModal()">Закрыть</button>
-            </div>
+    <!-- Время с 9:00 до 20:00 с интервалом в час -->
+    <div class="time-slots">
+        <div class="time-slot available" data-time="09:00">09:00</div>
+        <div class="time-slot available" data-time="10:00">10:00</div>
+        <div class="time-slot available" data-time="11:00">11:00</div>
+        <div class="time-slot available" data-time="12:00">12:00</div>
+        <div class="time-slot available" data-time="13:00">13:00</div>
+        <div class="time-slot available" data-time="14:00">14:00</div>
+        <div class="time-slot available" data-time="15:00">15:00</div>
+        <div class="time-slot available" data-time="16:00">16:00</div>
+        <div class="time-slot available" data-time="17:00">17:00</div>
+        <div class="time-slot available" data-time="18:00">18:00</div>
+        <div class="time-slot available" data-time="19:00">19:00</div>
+        <div class="time-slot available" data-time="20:00">20:00</div>
+    </div>
+    <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
+</div>
+
+        <!-- Шаг 4: Ввод данных -->
+        <div id="step4" class="step" style="display: none;">
+            <h2>Введите ваши данные</h2>
+            <input type="text" id="clientName" placeholder="ФИО" oninput="validateName(this)">
+            <input type="tel" id="clientPhone" placeholder="Номер телефона" oninput="formatPhone(this)">
+            <input type="text" id="clientCarNumber" placeholder="Номер авто">
+            <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
+        </div>
+
+        <!-- Шаг 5: Успешная запись -->
+        <div id="step5" class="step" style="display: none;">
+            <h2>Вы успешно записались!</h2>
+            <button onclick="closeModal()">Закрыть</button>
         </div>
     </div>
+</div>
 
     <!-- Подключение JavaScript -->
     <script src="script.js"></script>
