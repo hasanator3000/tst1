@@ -25,60 +25,60 @@
             </div>
             <div class='services-grid'>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="moyka.jpg" alt="Услуга" class="usluga-image">
+                    Мойка автомобиля
+                </div>
+                <div class='usluga'>
+                    <img src="antidozhd.jpg" alt="Услуга" class="usluga-image">
+                    Антидождь
+                </div>
+                <div class='usluga'>
+                    <img src="zashitpokryt.jpg" alt="Услуга" class="usluga-image">
+                    Защитные покрытия автомобиля
+                </div>
+                <div class='usluga'>
+                    <img src="poler.jpg" alt="Услуга" class="usluga-image">
+                    Полирорвка автомобиля
                 </div>
                 <div class='usluga'>
                     <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    Оклейка автомобиля пленкой
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="toner.jpg" alt="Услуга" class="usluga-image">
+                    Тонировка автомобиля
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="himka.jpg" alt="Услуга" class="usluga-image">
+                    Химчистка автомобиля
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="predprodazhka.jpg" alt="Услуга" class="usluga-image">
+                    Предпродажная подготовка автомобиля
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="kompluborka.jpg" alt="Услуга" class="usluga-image">
+                    Комплексная уборка салона автомобиля
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="newdet.jpg" alt="Услуга" class="usluga-image">
+                    Детейлинг нового автомобиля
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="motodet.jpg" alt="Услуга" class="usluga-image">
+                    Детейлинг мотоцикла
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="cabr.jpg" alt="Услуга" class="usluga-image">
+                    Детейлинг кабриолета
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="lob.jpg" alt="Услуга" class="usluga-image">
+                    Ремонт лобового стекла
                 </div>
                 <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
-                </div>
-                <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
-                </div>
-                <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
-                </div>
-                <div class='usluga'>
-                    <img src="usluga.jpg" alt="Услуга" class="usluga-image">
-                    Оклейка автомобиля плёнкой
+                    <img src="moykamoto.jpg" alt="Услуга" class="usluga-image">
+                    Мойка мотоцикла
                 </div>
             </div>
         </div>
@@ -208,43 +208,63 @@
         Записаться сейчас
     </div>
 
-    <script>
-        function toggleReadMore() {
-            const hiddenText = document.getElementById('hidden-text');
-            const readFullButton = document.getElementById('text1');
-            const hideButton = document.getElementById('hide-button');
-            const gradientOverlay = document.getElementById('gradient-overlay');
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <!-- Шаг 1: Выбор марки и модели -->
+            <div id="step1" class="step">
+                <h2>Выберите марку и модель автомобиля</h2>
+                <select id="brand" onchange="updateModels()">
+                    <option value="">Выберите марку</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Porsche">Porsche</option>
+                </select>
+                <select id="model" disabled>
+                    <option value="">Выберите модель</option>
+                </select>
+                <button id="next1" disabled onclick="nextStep(2)">Подтвердить</button>
+            </div>
 
-            if (hiddenText.style.display === 'none') {
-                hiddenText.style.display = 'block';
-                readFullButton.style.display = 'none'; // Скрываем кнопку "Читать полностью"
-                hideButton.style.display = 'block'; // Показываем кнопку "Скрыть"
-                gradientOverlay.style.display = 'none'; // Скрываем градиент
-            } else {
-                hiddenText.style.display = 'none';
-                readFullButton.style.display = 'block'; // Показываем кнопку "Читать полностью"
-                hideButton.style.display = 'none'; // Скрываем кнопку "Скрыть"
-                gradientOverlay.style.display = 'block'; // Показываем градиент
-            }
-        }
+            <!-- Шаг 2: Выбор услуг -->
+            <div id="step2" class="step" style="display: none;">
+                <h2>Выберите услуги</h2>
+                <label><input type="checkbox" name="service" value="2500" onchange="updateTotal()"> Мойка (2500₽)</label>
+                <label><input type="checkbox" name="service" value="3000" onchange="updateTotal()"> Тонировка (3000₽)</label>
+                <p>Подытог: <span id="total">0₽</span></p>
+                <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
+            </div>
 
-        // Скрипт для скрытия кнопки "Записаться сейчас"
-        document.addEventListener('scroll', function() {
-            const fixedButton = document.getElementById('fixed-button');
-            const aboutSection = document.getElementById('about-section');
-            const footer = document.getElementById('footer');
+            <!-- Шаг 3: Выбор времени -->
+            <div id="step3" class="step" style="display: none;">
+                <h2>Выберите время</h2>
+                <div class="time-slots">
+                    <div class="time-slot available" data-time="10:00">10:00</div>
+                    <div class="time-slot unavailable" data-time="11:00">11:00</div>
+                    <div class="time-slot available" data-time="12:00">12:00</div>
+                    <div class="time-slot unavailable" data-time="13:00">13:00</div>
+                    <div class="time-slot available" data-time="14:00">14:00</div>
+                </div>
+                <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
+            </div>
 
-            // Получаем координаты блоков
-            const aboutSectionRect = aboutSection.getBoundingClientRect();
-            const footerRect = footer.getBoundingClientRect();
+           <!-- Шаг 4: Ввод данных -->
+            <div id="step4" class="step" style="display: none;">
+                <h2>Введите ваши данные</h2>
+                <input type="text" id="clientName" placeholder="ФИО">
+                <input type="tel" id="clientPhone" placeholder="Номер телефона">
+                <input type="text" id="clientCarNumber" placeholder="Номер авто">
+                <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
+            </div>
 
-            // Проверяем, виден ли блок about-section или footer
-            if (aboutSectionRect.top <= window.innerHeight || footerRect.top <= window.innerHeight) {
-                fixedButton.classList.add('hidden'); // Скрываем кнопку
-            } else {
-                fixedButton.classList.remove('hidden'); // Показываем кнопку
-            }
-        });
-    </script>
+            <!-- Шаг 5: Успешная запись -->
+            <div id="step5" class="step" style="display: none;">
+                <h2>Вы успешно записались!</h2>
+                <button onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключение JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
