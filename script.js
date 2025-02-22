@@ -34,12 +34,38 @@ function nextStep(step) {
     showStep(step);
 }
 
+// Переход на предыдущий шаг
+function prevStep() {
+    const currentStep = document.querySelector('.step[style="display: flex;"]');
+    if (currentStep) {
+        const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+        if (currentStepNumber > 1) {
+            showStep(currentStepNumber - 1);
+        }
+    }
+}
+
 // Показ текущего шага и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function(stepElement) {
         stepElement.style.display = 'none';
     });
     document.getElementById(`step${step}`).style.display = 'flex';
+
+    // Управление видимостью кнопки "Назад" и крестика
+    const backButton = document.querySelector('.back-button');
+    const closeButton = document.querySelector('.close-modal');
+
+    if (step === 1) {
+        backButton.style.display = 'none'; // На первом шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    } else if (step === 5) {
+        backButton.style.display = 'none'; // На последнем шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'none'; // Крестик скрываем
+    } else {
+        backButton.style.display = 'block'; // На остальных шагах показываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    }
 
     if (step === 4) {
         validateStep4();
@@ -186,3 +212,73 @@ document.addEventListener('scroll', function() {
         fixedButton.classList.remove('hidden');
     }
 });
+
+// Переменная для хранения текущего смещения дней
+let currentDayOffset = 0;
+
+// Функция для изменения дня
+function changeDay(offset) {
+    currentDayOffset += offset;
+    updateDayDisplay();
+}
+
+// Функция для обновления отображения текущей даты
+function updateDayDisplay() {
+    const currentDayElement = document.getElementById('current-day');
+    const today = new Date(); // Текущая дата
+    today.setDate(today.getDate() + currentDayOffset); // Добавляем смещение
+
+    // Форматируем дату в формате "ДД.ММ.ГГГГ"
+    const formattedDate = today.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    currentDayElement.textContent = formattedDate; // Отображаем дату
+}
+
+// Инициализация выбора времени
+document.querySelectorAll('.time-slot').forEach(function(slot) {
+    slot.addEventListener('click', function() {
+        if (!slot.classList.contains('unavailable')) {
+            document.querySelectorAll('.time-slot').forEach(function(s) {
+                s.classList.remove('selected');
+            });
+            slot.classList.add('selected');
+            document.getElementById('next3').disabled = false;
+        }
+    });
+});
+
+// При показе шага 3 обновляем отображение даты
+function showStep(step) {
+    document.querySelectorAll('.step').forEach(function(stepElement) {
+        stepElement.style.display = 'none';
+    });
+    document.getElementById(`step${step}`).style.display = 'flex';
+
+    if (step === 3) {
+        updateDayDisplay(); // Обновляем дату при открытии шага 3
+    }
+
+    // Управление видимостью кнопки "Назад" и крестика
+    const backButton = document.querySelector('.back-button');
+    const closeButton = document.querySelector('.close-modal');
+
+    if (step === 1) {
+        backButton.style.display = 'none'; // На первом шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    } else if (step === 5) {
+        backButton.style.display = 'none'; // На последнем шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'none'; // Крестик скрываем
+    } else {
+        backButton.style.display = 'block'; // На остальных шагах показываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    }
+
+    if (step === 4) {
+        validateStep4();
+        setupStep4Listeners();
+    }
+}
