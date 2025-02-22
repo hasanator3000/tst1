@@ -95,6 +95,54 @@ document.querySelectorAll('.time-slot').forEach(function(slot) {
     });
 });
 
+// Валидация поля "ФИО" (только буквы и пробелы)
+function validateName(input) {
+    input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, ''); // Удаляем всё, кроме букв и пробелов
+    validateStep4(); // Проверяем валидацию шага 4
+}
+
+// Форматирование номера телефона
+function formatPhone(input) {
+    // Удаляем всё, кроме цифр
+    let phone = input.value.replace(/\D/g, '');
+
+    // Если номер начинается с 7 или 8, заменяем на +7
+    if (phone.startsWith('7') || phone.startsWith('8')) {
+        phone = phone.substring(1); // Убираем первую цифру (7 или 8)
+    }
+
+    // Ограничиваем длину номера (10 цифр, без +7)
+    if (phone.length > 10) {
+        phone = phone.substring(0, 10);
+    }
+
+    // Форматируем номер по шаблону +7 (777) 777-77-77
+    let formattedPhone = '+7';
+    if (phone.length > 0) {
+        formattedPhone += ` (${phone.substring(0, 3)}`;
+    }
+    if (phone.length > 3) {
+        formattedPhone += `) ${phone.substring(3, 6)}`;
+    }
+    if (phone.length > 6) {
+        formattedPhone += `-${phone.substring(6, 8)}`;
+    }
+    if (phone.length > 8) {
+        formattedPhone += `-${phone.substring(8, 10)}`;
+    }
+
+    input.value = formattedPhone;
+    validateStep4(); // Проверяем валидацию шага 4
+}
+
+// Добавляем +7 при фокусе на поле ввода телефона
+document.getElementById('clientPhone').addEventListener('focus', function() {
+    const phoneInput = this;
+    if (!phoneInput.value.startsWith('+7')) {
+        phoneInput.value = '+7';
+    }
+});
+
 // Валидация данных на шаге 4
 function validateStep4() {
     const nameInput = document.getElementById('clientName');
@@ -106,7 +154,10 @@ function validateStep4() {
     const phone = phoneInput.value.trim();
     const carNumber = carNumberInput.value.trim();
 
-    nextButton.disabled = !(name && phone && carNumber);
+    // Проверяем, что номер телефона заполнен полностью
+    const isPhoneValid = phone.length === 18; // +7 (777) 777-77-77
+
+    nextButton.disabled = !(name && isPhoneValid && carNumber);
 }
 
 // Добавляем обработчики событий для полей ввода на шаге 4
