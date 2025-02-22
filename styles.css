@@ -30,35 +30,17 @@ body {
     height: 20px;
 }
 
-/* Добавляем отступы 3.5% по бокам для выбранных элементов */
-.logo,
-.group1,
-.content,
-.text1,
-.hidden-text,
-.hide-button,
-.primeri {
-    padding: 0 3.5%;
-}
-
-/* Остальные стили остаются без изменений */
 .name, .number {
     font-size: 10px;
     font-weight: 700;
     color: #131414;
 }
 
-.inner {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
 .logo {
     text-align: left;
     margin-bottom: 20px;
     margin-top: 20px;
+    padding: 0 3.5%;
 }
 
 .logo-image {
@@ -70,6 +52,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 0 3.5%;
 }
 
 .heading2→услугидетейлингцентра {
@@ -108,6 +91,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0;
+    padding: 0 3.5%;
 }
 
 .heading2→детейлингцентрвмоскве {
@@ -137,6 +121,7 @@ body {
 .text1 {
     text-align: left;
     margin-top: 0;
+    padding: 0 3.5%;
 }
 
 .link {
@@ -163,12 +148,14 @@ body {
     line-height: 1.5;
     color: #56595a;
     margin-top: 0;
+    padding: 0 3.5%;
 }
 
 .primeri {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding: 0 3.5%;
 }
 
 .heading2→примерыработ {
@@ -212,7 +199,7 @@ body {
     text-align: center;
 }
 
-/* Раздел "О нас" (бывший "Контакты") */
+/* Раздел "О нас" */
 .about-section {
     margin-top: 20px;
     text-align: left;
@@ -306,6 +293,22 @@ body {
     border-radius: 10px;
     width: 300px;
     text-align: center;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #56595a;
 }
 
 .step {
@@ -323,34 +326,99 @@ body {
 
 .time-slot {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 2px solid #000000;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    background-color: #eeeeee;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.time-slot.available {
-    border-color: #000;
-    background-color: #f0f0f0;
+.time-slot.available:hover {
+    background-color: #d9d9d9;
+}
+
+.time-slot.selected {
+    background-color: #000000;
+    color: #ffffff;
 }
 
 .time-slot.unavailable {
-    background-color: #ccc;
+    background-color: #cccccc;
     cursor: not-allowed;
 }
 
 /* Стили для кнопок */
 button {
-    padding: 10px;
-    background-color: #000;
-    color: #fff;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background-color: #000000;
+    color: #ffffff;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #56595a;
 }
 
 button:disabled {
-    background-color: #ccc;
+    background-color: #cccccc;
     cursor: not-allowed;
+}
+
+/* Стили для выпадающих списков */
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: #eeeeee;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    appearance: none;
+    cursor: pointer;
+}
+
+select:hover {
+    border-color: #56595a;
+}
+
+select:focus {
+    outline: none;
+    border-color: #000000;
+    background-color: #ffffff;
+}
+
+/* Стили для полей ввода */
+input[type="text"],
+input[type="tel"] {
+    width: 100%; /* Уменьшаем ширину на 24px (12px padding с каждой стороны) */
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: #eeeeee;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    box-sizing: border-box; /* Учитываем padding и border в общей ширине */
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus {
+    outline: none;
+    border-color: #000000;
+    background-color: #ffffff;
 }
 
 /* Стили для кнопки "Записаться сейчас" */
