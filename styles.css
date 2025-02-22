@@ -244,8 +244,8 @@ body {
 /* Стили для виджета рейтинга Яндекс.Карт */
 .RatingBadgeWidget {
     display: inline-block;
-    width: 100px; /* Ширина виджета */
-    height: 30px; /* Высота виджета */
+    width: 120px; /* Ширина виджета */
+    height: 36px; /* Высота виджета */
     background-size: cover;
     margin-top: 10px; /* Отступ сверху */
 }
@@ -261,7 +261,6 @@ body {
     padding: 20px; /* Внутренние отступы */
     margin-top: 0; /* Убираем отступ сверху */
     margin-bottom: 0; /* Убираем отступ снизу */
-    border-radius: 0 0 0 0;
 }
 
 .footer-left {
