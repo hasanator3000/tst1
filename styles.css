@@ -284,3 +284,28 @@ body {
 .spacer {
     height: 20px; /* Высота отступа */
 }
+
+/* Стили для кнопки "Записаться сейчас" */
+.fixed-button {
+    position: fixed;
+    bottom: 20px; /* Отступ от нижнего края */
+    left: 50%; /* Выравнивание по центру */
+    transform: translateX(-50%); /* Центрирование */
+    background-color: rgba(238, 238, 238, 0.93);
+    border-radius: 25px; /* Более скругленные края */
+    padding: 15px 30px; /* Внутренние отступы */
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Чтобы кнопка была поверх других элементов */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Плавное исчезновение */
+}
+
+/* Скрытие кнопки при попадании в зону about-section и footer */
+.fixed-button.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
