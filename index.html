@@ -19,6 +19,7 @@
             <img src="logo.png" alt="Логотип Koch24" class="logo-image">
         </div>
 
+        <!-- Услуги -->
         <div id='group1' class='group1'>
             <div id='heading2→услугидетейлингцентра' class='heading2→услугидетейлингцентра'>
                 Услуги детейлинг центра
@@ -93,7 +94,7 @@
                 <div class="spacer"></div>
                 Услуги детейлинга автомобиля:
                 <div class="spacer"></div>
-                <div id="gradient-overlay" class="gradient-overlay"></div> <!-- Градиентный оверлей -->
+                <div id="gradient-overlay" class="gradient-overlay"></div>
             </div>
         </div>
 
@@ -171,7 +172,7 @@
             </div>
         </div>
 
-        <!-- Раздел "О нас" (бывший "Контакты") -->
+        <!-- Раздел "О нас" -->
         <div id='about-section' class='about-section'>
             <div id='heading2→контакты' class='heading2→контакты'>
                 <img src="logoblack.svg" alt="Логотип Koch24" class="logo-black">
@@ -211,6 +212,9 @@
     <!-- Модальное окно -->
     <div id="modal" class="modal">
         <div class="modal-content">
+            <!-- Крестик для закрытия модального окна -->
+            <div class="close-modal" onclick="closeModal()">×</div>
+
             <!-- Шаг 1: Выбор марки и модели -->
             <div id="step1" class="step">
                 <h2>Выберите марку и модель автомобиля</h2>
@@ -247,14 +251,14 @@
                 <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
             </div>
 
-           <!-- Шаг 4: Ввод данных -->
-            <div id="step4" class="step" style="display: none;">
-                <h2>Введите ваши данные</h2>
-                <input type="text" id="clientName" placeholder="ФИО">
-                <input type="tel" id="clientPhone" placeholder="Номер телефона">
-                <input type="text" id="clientCarNumber" placeholder="Номер авто">
-                <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
-            </div>
+            <!-- Шаг 4: Ввод данных -->
+<div id="step4" class="step" style="display: none;">
+    <h2>Введите ваши данные</h2>
+    <input type="text" id="clientName" placeholder="ФИО">
+    <input type="tel" id="clientPhone" placeholder="Номер телефона">
+    <input type="text" id="clientCarNumber" placeholder="Номер авто">
+    <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
+</div>
 
             <!-- Шаг 5: Успешная запись -->
             <div id="step5" class="step" style="display: none;">
