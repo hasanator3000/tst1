@@ -238,6 +238,26 @@ body {
     margin-top: 10px;
 }
 
+/* Стили для иконок социальных сетей */
+.social-links {
+    display: flex;
+    flex-direction: column; /* Иконки друг под другом */
+    align-items: center; /* Выравнивание по центру */
+    gap: 10px; /* Расстояние между иконками */
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 32px; /* Размер иконок */
+    height: 32px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.social-icon:hover {
+    transform: scale(1.1); /* Увеличиваем иконку при наведении */
+    opacity: 0.8; /* Немного уменьшаем прозрачность */
+}
+
 /* Футер */
 .footer {
     display: flex;
@@ -294,6 +314,7 @@ body {
     width: 300px;
     text-align: center;
     position: relative;
+    box-sizing: border-box; /* Учитываем padding в общей ширине */
 }
 
 .close-modal {
@@ -402,7 +423,7 @@ select:focus {
 /* Стили для полей ввода */
 input[type="text"],
 input[type="tel"] {
-    width: 100%; /* Уменьшаем ширину на 24px (12px padding с каждой стороны) */
+    width: 100%; /* Занимаем всю доступную ширину */
     padding: 12px;
     margin: 10px 0;
     border: 2px solid #000000;
