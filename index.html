@@ -19,7 +19,6 @@
             <img src="logo.png" alt="Логотип Koch24" class="logo-image">
         </div>
 
-        <!-- Услуги детейлинг центра -->
         <div id='group1' class='group1'>
             <div id='heading2→услугидетейлингцентра' class='heading2→услугидетейлингцентра'>
                 Услуги детейлинг центра
@@ -204,6 +203,11 @@
         </div>
     </div>
 
+    <!-- Кнопка "Записаться сейчас" -->
+    <div id="fixed-button" class="fixed-button">
+        Записаться сейчас
+    </div>
+
     <script>
         function toggleReadMore() {
             const hiddenText = document.getElementById('hidden-text');
@@ -223,6 +227,24 @@
                 gradientOverlay.style.display = 'block'; // Показываем градиент
             }
         }
+
+        // Скрипт для скрытия кнопки "Записаться сейчас"
+        document.addEventListener('scroll', function() {
+            const fixedButton = document.getElementById('fixed-button');
+            const aboutSection = document.getElementById('about-section');
+            const footer = document.getElementById('footer');
+
+            // Получаем координаты блоков
+            const aboutSectionRect = aboutSection.getBoundingClientRect();
+            const footerRect = footer.getBoundingClientRect();
+
+            // Проверяем, виден ли блок about-section или footer
+            if (aboutSectionRect.top <= window.innerHeight || footerRect.top <= window.innerHeight) {
+                fixedButton.classList.add('hidden'); // Скрываем кнопку
+            } else {
+                fixedButton.classList.remove('hidden'); // Показываем кнопку
+            }
+        });
     </script>
 </body>
 </html>
