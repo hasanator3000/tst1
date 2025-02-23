@@ -121,9 +121,25 @@ document.querySelectorAll('.time-slot').forEach(function(slot) {
     });
 });
 
+// Функция для автоматической капитализации первой буквы каждого слова
+function capitalizeInput(input) {
+    let value = input.value;
+
+    if (!value) return;
+
+    value = value
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+
+    input.value = value;
+}
+
 // Валидация поля "ФИО" (только буквы и пробелы)
 function validateName(input) {
     input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, ''); // Удаляем всё, кроме букв и пробелов
+    capitalizeInput(input); // Применяем капитализацию
     validateStep4(); // Проверяем валидацию шага 4
 }
 
@@ -167,6 +183,22 @@ document.getElementById('clientPhone').addEventListener('focus', function() {
     if (!phoneInput.value.startsWith('+7')) {
         phoneInput.value = '+7';
     }
+});
+
+// Функция для автоматической капитализации первой буквы каждого слова
+function capitalizeInput(input) {
+    input.value = input.value
+        .toLowerCase() // Приводим весь текст к нижнему регистру
+        .split(' ') // Разделяем строку по пробелам
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Капитализируем первую букву каждого слова
+        .join(' '); // Соединяем слова обратно в строку
+}
+
+document.getElementById('clientName').addEventListener('paste', function(event) {
+    event.preventDefault(); // Отменяем стандартное поведение вставки
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text'); // Получаем вставленный текст
+    this.value = pastedText; // Вставляем текст в поле
+    capitalizeInput(this); // Применяем функцию капитализации
 });
 
 // Валидация данных на шаге 4
