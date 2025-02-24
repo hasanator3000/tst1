@@ -154,9 +154,17 @@ body {
     color: #000000;
 }
 
-.more2.svg {
-    width: 10px;
-    height: 10px;
+/* Стили для SVG-иконки */
+.more2.svgfill svg {
+    width: 10px; /* Размер иконки */
+    height: 10px; /* Размер иконки */
+    stroke: #000000; /* Цвет обводки (черный) */
+    stroke-width: 3; /* Толщина обводки */
+}
+
+/* Переворачиваем иконку для кнопки "Скрыть" */
+#hide-button .more2.svgfill svg {
+    transform: rotate(180deg);
 }
 
 .hidden-text {
