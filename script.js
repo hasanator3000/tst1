@@ -10,11 +10,19 @@ function toggleReadMore() {
         readFullButton.style.display = 'none';
         hideButton.style.display = 'block';
         gradientOverlay.style.display = 'none';
+
+        // Меняем стрелку на кнопке "Скрыть" (теперь направлена вверх)
+        const arrowIcon = hideButton.querySelector('.more2.svg3');
+        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAALCAYAAACgR9dcAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA0SURBVHgB7YwxDsAgCEOpdP//sktjiB7s4BQfD4xrRAwKQ7XWZk6YVWvtk5n5Y4Q2pZQv+QN+hw4T3kqFJAAAAABJRU5ErkJggg=='; // Стрелка вверх
     } else {
         hiddenText.style.display = 'none';
         readFullButton.style.display = 'block';
         hideButton.style.display = 'none';
         gradientOverlay.style.display = 'block';
+
+        // Возвращаем исходную стрелку (вниз)
+        const arrowIcon = readFullButton.querySelector('.more2.svg3');
+        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABJSURBVHgB1YtRDQAgCAWJYAQiGI0G2sAoRjKK4iabYyL++rb7gTuAPxeZZPyQqUyQAzH9EEyxLXB/ZBWYog6KJ+rAFWX0Kl43AHdjEHGmKDxFAAAAAElFTkSuQmCC'; // Стрелка вниз
     }
 }
 
