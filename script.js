@@ -2,10 +2,17 @@ let db;
 
 // Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function() {
-    db = await dbFunctions.initDatabase();
-    const brands = await dbFunctions.getBrands(db);
-    populateBrands(brands);
-    showStep(1);
+    console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
+    try {
+        db = await dbFunctions.initDatabase();
+        console.log("База данных инициализирована"); // Проверка инициализации базы
+        const brands = await dbFunctions.getBrands(db);
+        console.log("Марки загружены:", brands); // Проверка загрузки марок
+        populateBrands(brands);
+        showStep(1);
+    } catch (error) {
+        console.error("Ошибка:", error); // Ловим ошибки
+    }
 });
 
 // Заполнение выбора марок
