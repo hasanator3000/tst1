@@ -1,5 +1,31 @@
 let db;
 
+// Функция для отображения шага
+function showStep(step) {
+    // Скрываем все шаги
+    document.querySelectorAll('.step').forEach(stepElement => {
+        stepElement.style.display = 'none';
+    });
+
+    // Показываем текущий шаг
+    document.getElementById(`step${step}`).style.display = 'flex';
+
+    // Управление видимостью кнопки "Назад" и крестика
+    const backButton = document.querySelector('.back-button');
+    const closeButton = document.querySelector('.close-modal');
+
+    if (step === 1) {
+        backButton.style.display = 'none'; // На первом шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    } else if (step === 5) {
+        backButton.style.display = 'none'; // На последнем шаге скрываем кнопку "Назад"
+        closeButton.style.display = 'none'; // Крестик скрываем
+    } else {
+        backButton.style.display = 'block'; // На остальных шагах показываем кнопку "Назад"
+        closeButton.style.display = 'block'; // Крестик отображается
+    }
+}
+
 // Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function() {
     console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
