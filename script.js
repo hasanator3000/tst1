@@ -1,13 +1,44 @@
-let db;
+// ------------ Глобальные переменные ------------
+let db; // База данных
+let currentDayOffset = 0; // Смещение для выбора даты
 
-// Функция для отображения шага
+// ------------ Общие функции интерфейса ------------
+
+// Функция для кнопки "Читать полностью"
+function toggleReadMore() {
+    const hiddenText = document.getElementById('hidden-text');
+    const readFullButton = document.getElementById('text1');
+    const hideButton = document.getElementById('hide-button');
+    const gradientOverlay = document.getElementById('gradient-overlay');
+
+    if (hiddenText.style.display === 'none') {
+        hiddenText.style.display = 'block';
+        readFullButton.style.display = 'none';
+        hideButton.style.display = 'block';
+        gradientOverlay.style.display = 'none';
+
+        // Меняем стрелку на кнопке "Скрыть" (теперь направлена вверх)
+        const arrowIcon = hideButton.querySelector('.more2.svg3');
+        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAALCAYAAACgR9dcAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA0SURBVHgB7YwxDsAgCEOpdP//sktjiB7s4BQfD4xrRAwKQ7XWZk6YVWvtk5n5Y4Q2pZQv+QN+hw4T3kqFJAAAAABJRU5ErkJggg=='; // Стрелка вверх
+    } else {
+        hiddenText.style.display = 'none';
+        readFullButton.style.display = 'block';
+        hideButton.style.display = 'none';
+        gradientOverlay.style.display = 'block';
+
+        // Возвращаем исходную стрелку (вниз)
+        const arrowIcon = readFullButton.querySelector('.more2.svg3');
+        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABJSURBVHgB1YtRDQAgCAWJYAQiGI0G2sAoRjKK4iabYyL++rb7gTuAPxeZZPyQqUyQAzH9EEyxLXB/ZBWYog6KJ+rAFWX0Kl43AHdjEHGmKDxFAAAAAElFTkSuQmCC'; // Стрелка вниз
+    }
+}
+
+// ------------ Функции для модального окна ------------
+
+// Показ текущего шага и скрытие остальных
 function showStep(step) {
-    // Скрываем все шаги
-    document.querySelectorAll('.step').forEach(stepElement => {
+    document.querySelectorAll('.step').forEach(function (stepElement) {
         stepElement.style.display = 'none';
     });
-
-    // Показываем текущий шаг
     document.getElementById(`step${step}`).style.display = 'flex';
 
     // Управление видимостью кнопки "Назад" и крестика
@@ -24,22 +55,39 @@ function showStep(step) {
         backButton.style.display = 'block'; // На остальных шагах показываем кнопку "Назад"
         closeButton.style.display = 'block'; // Крестик отображается
     }
+
+    if (step === 4) {
+        validateStep4();
+        setupStep4Listeners();
+    }
 }
 
-// Инициализация базы данных при открытии модального окна
-document.getElementById('fixed-button').addEventListener('click', async function() {
-    console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
-    try {
-        db = await dbFunctions.initDatabase();
-        console.log("База данных инициализирована"); // Проверка инициализации базы
-        const brands = await dbFunctions.getBrands(db);
-        console.log("Марки загружены:", brands); // Проверка загрузки марок
-        populateBrands(brands);
-        showStep(1);
-    } catch (error) {
-        console.error("Ошибка:", error); // Ловим ошибки
+// Переход к следующему шагу
+function nextStep(step) {
+    if (step === 5) {
+        saveAppointment();
+    } else {
+        showStep(step);
     }
-});
+}
+
+// Переход на предыдущий шаг
+function prevStep() {
+    const currentStep = document.querySelector('.step[style="display: flex;"]');
+    if (currentStep) {
+        const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+        if (currentStepNumber > 1) {
+            showStep(currentStepNumber - 1);
+        }
+    }
+}
+
+// Закрытие модального окна
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+// ------------ Работа с данными ------------
 
 // Заполнение выбора марок
 function populateBrands(brands) {
@@ -53,13 +101,6 @@ function populateBrands(brands) {
     });
 }
 
-// Обновление моделей при выборе марки
-document.getElementById('brand').addEventListener('change', async function() {
-    const brandId = this.value;
-    const models = await dbFunctions.getModels(db, brandId);
-    populateModels(models);
-});
-
 // Заполнение выбора моделей
 function populateModels(models) {
     const modelSelect = document.getElementById('model');
@@ -71,13 +112,6 @@ function populateModels(models) {
         modelSelect.appendChild(option);
     });
 }
-
-// Получение услуг при выборе модели
-document.getElementById('model').addEventListener('change', async function() {
-    const modelId = this.value;
-    const services = await dbFunctions.getServices(db, modelId);
-    populateServices(services);
-});
 
 // Заполнение выбора услуг
 function populateServices(services) {
@@ -91,19 +125,6 @@ function populateServices(services) {
         `;
         servicesContainer.appendChild(label);
     });
-}
-
-// Обновление подытога и временных слотов
-function updateTotal() {
-    const selectedServices = document.querySelectorAll('input[name="service"]:checked');
-    let total = 0;
-    let totalDuration = 0;
-    selectedServices.forEach(service => {
-        total += parseInt(service.dataset.price);
-        totalDuration += parseInt(service.dataset.duration);
-    });
-    document.getElementById('total').textContent = `${total}₽`;
-    populateTimeSlots(totalDuration);
 }
 
 // Расчет временных слотов
@@ -133,7 +154,7 @@ function populateTimeSlots(duration) {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'time-slot available';
         slotDiv.textContent = `${slot.start} - ${slot.end}`;
-        slotDiv.addEventListener('click', function() {
+        slotDiv.addEventListener('click', function () {
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
             document.getElementById('next3').disabled = false;
@@ -142,28 +163,195 @@ function populateTimeSlots(duration) {
     });
 }
 
-// Сохранение записи
-async function saveAppointment() {
-    const selectedServices = Array.from(document.querySelectorAll('input[name="service"]:checked')).map(s => s.value);
-    const selectedTime = document.querySelector('.time-slot.selected').textContent.split(' - ');
-    await dbFunctions.saveAppointment(
-        db,
-        document.getElementById('clientName').value,
-        document.getElementById('clientPhone').value,
-        document.getElementById('clientCarNumber').value,
-        document.getElementById('model').value,
-        selectedServices,
-        selectedTime[0],
-        selectedTime[1]
-    );
-    showStep(5);
+// Обновление подытога
+function updateTotal() {
+    const selectedServices = document.querySelectorAll('input[name="service"]:checked');
+    let total = 0;
+    let totalDuration = 0;
+    selectedServices.forEach(service => {
+        total += parseInt(service.dataset.price);
+        totalDuration += parseInt(service.dataset.duration);
+    });
+    document.getElementById('total').textContent = `${total}₽`;
+    populateTimeSlots(totalDuration);
 }
 
-// Переход к следующему шагу
-function nextStep(step) {
-    if (step === 5) {
-        saveAppointment();
-    } else {
-        showStep(step);
-    }
+// ------------ Валидация и форматирование ------------
+
+// Автоматическая капитализация первой буквы каждого слова
+function capitalizeInput(input) {
+    input.value = input.value
+        .toLowerCase() // Приводим весь текст к нижнему регистру
+        .split(' ') // Разделяем строку по пробелам
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Капитализируем первую букву каждого слова
+        .join(' '); // Соединяем слова обратно в строку
 }
+
+// Валидация поля "ФИО" (только буквы и пробелы)
+function validateName(input) {
+    input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, ''); // Удаляем всё, кроме букв и пробелов
+    capitalizeInput(input); // Применяем капитализацию
+    validateStep4(); // Проверяем валидацию шага 4
+}
+
+// Форматирование номера телефона
+function formatPhone(input) {
+    // Удаляем всё, кроме цифр
+    let phone = input.value.replace(/\D/g, '');
+
+    // Если номер начинается с 7 или 8, заменяем на +7
+    if (phone.startsWith('7') || phone.startsWith('8')) {
+        phone = phone.substring(1); // Убираем первую цифру (7 или 8)
+    }
+
+    // Ограничиваем длину номера (10 цифр, без +7)
+    if (phone.length > 10) {
+        phone = phone.substring(0, 10);
+    }
+
+    // Форматируем номер по шаблону +7 (777) 777-77-77
+    let formattedPhone = '+7';
+    if (phone.length > 0) {
+        formattedPhone += ` (${phone.substring(0, 3)}`;
+    }
+    if (phone.length > 3) {
+        formattedPhone += `) ${phone.substring(3, 6)}`;
+    }
+    if (phone.length > 6) {
+        formattedPhone += `-${phone.substring(6, 8)}`;
+    }
+    if (phone.length > 8) {
+        formattedPhone += `-${phone.substring(8, 10)}`;
+    }
+
+    input.value = formattedPhone;
+    validateStep4(); // Проверяем валидацию шага 4
+}
+
+// Валидация данных на шаге 4
+function validateStep4() {
+    const nameInput = document.getElementById('clientName');
+    const phoneInput = document.getElementById('clientPhone');
+    const carNumberInput = document.getElementById('clientCarNumber');
+    const nextButton = document.getElementById('next4');
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const carNumber = carNumberInput.value.trim();
+
+    // Проверяем, что номер телефона заполнен полностью
+    const isPhoneValid = phone.length === 18; // +7 (777) 777-77-77
+
+    nextButton.disabled = !(name && isPhoneValid && carNumber);
+}
+
+// Добавляем обработчики событий для полей ввода на шаге 4
+function setupStep4Listeners() {
+    const nameInput = document.getElementById('clientName');
+    const phoneInput = document.getElementById('clientPhone');
+    const carNumberInput = document.getElementById('clientCarNumber');
+
+    nameInput.addEventListener('input', validateStep4);
+    phoneInput.addEventListener('input', validateStep4);
+    carNumberInput.addEventListener('input', validateStep4);
+}
+
+// ------------ Инициализация и обработчики ------------
+
+// Инициализация базы данных при открытии модального окна
+document.getElementById('fixed-button').addEventListener('click', async function () {
+    console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
+    try {
+        db = await dbFunctions.initDatabase();
+        console.log("База данных инициализирована"); // Проверка инициализации базы
+        const brands = await dbFunctions.getBrands(db);
+        console.log("Марки загружены:", brands); // Проверка загрузки марок
+        populateBrands(brands);
+        showStep(1);
+    } catch (error) {
+        console.error("Ошибка:", error); // Ловим ошибки
+    }
+});
+
+// Обновление моделей при выборе марки
+document.getElementById('brand').addEventListener('change', async function () {
+    const brandId = this.value;
+    const models = await dbFunctions.getModels(db, brandId);
+    populateModels(models);
+});
+
+// Получение услуг при выборе модели
+document.getElementById('model').addEventListener('change', async function () {
+    const modelId = this.value;
+    const services = await dbFunctions.getServices(db, modelId);
+    populateServices(services);
+});
+
+// Добавляем +7 при фокусе на поле ввода телефона
+document.getElementById('clientPhone').addEventListener('focus', function () {
+    const phoneInput = this;
+    if (!phoneInput.value.startsWith('+7')) {
+        phoneInput.value = '+7';
+    }
+});
+
+// Обработка вставки текста в поле "ФИО"
+document.getElementById('clientName').addEventListener('paste', function (event) {
+    event.preventDefault(); // Отменяем стандартное поведение вставки
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text'); // Получаем вставленный текст
+    this.value = pastedText; // Вставляем текст в поле
+    capitalizeInput(this); // Применяем функцию капитализации
+});
+
+// Скрытие кнопки "Записаться сейчас" при прокрутке до черного поля
+document.addEventListener('scroll', function () {
+    const fixedButton = document.getElementById('fixed-button');
+    const aboutSection = document.querySelector('.about-section');
+    const footer = document.querySelector('.footer');
+
+    const aboutSectionRect = aboutSection.getBoundingClientRect();
+    const footerRect = footer.getBoundingClientRect();
+
+    if (aboutSectionRect.top <= window.innerHeight || footerRect.top <= window.innerHeight) {
+        fixedButton.classList.add('hidden');
+    } else {
+        fixedButton.classList.remove('hidden');
+    }
+});
+
+// ------------ Вспомогательные функции ------------
+
+// Функция для изменения дня
+function changeDay(offset) {
+    currentDayOffset += offset;
+    updateDayDisplay();
+}
+
+// Функция для обновления отображения текущей даты
+function updateDayDisplay() {
+    const currentDayElement = document.getElementById('current-day');
+    const today = new Date(); // Текущая дата
+    today.setDate(today.getDate() + currentDayOffset); // Добавляем смещение
+
+    // Форматируем дату в формате "ДД.ММ.ГГГГ"
+    const formattedDate = today.toLocaleDateString('ru-RU', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+    });
+
+    currentDayElement.textContent = formattedDate; // Отображаем дату
+}
+
+// Инициализация выбора времени
+document.querySelectorAll('.time-slot').forEach(function (slot) {
+    slot.addEventListener('click', function () {
+        if (!slot.classList.contains('unavailable')) {
+            document.querySelectorAll('.time-slot').forEach(function (s) {
+                s.classList.remove('selected');
+            });
+            slot.classList.add('selected');
+            document.getElementById('next3').disabled = false;
+        }
+    });
+});
