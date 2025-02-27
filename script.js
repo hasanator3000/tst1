@@ -40,7 +40,6 @@ document.getElementById('fixed-button').addEventListener('click', function() {
     showStep(1);
 });
 
-
 // Показ текущего шага и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
@@ -100,6 +99,12 @@ function closeModal() {
 function populateBrands(brands) {
     const brandSelect = document.getElementById('brand');
     brandSelect.innerHTML = '<option value="">Выберите марку</option>';
+
+    if (!brands || !Array.isArray(brands)) {
+        console.error("Ошибка: brands не определен или не является массивом");
+        return;
+    }
+
     brands.forEach(brand => {
         const option = document.createElement('option');
         option.value = brand.id;
@@ -112,6 +117,12 @@ function populateBrands(brands) {
 function populateModels(models) {
     const modelSelect = document.getElementById('model');
     modelSelect.innerHTML = '<option value="">Выберите модель</option>';
+
+    if (!models || !Array.isArray(models)) {
+        console.error("Ошибка: models не определен или не является массивом");
+        return;
+    }
+
     models.forEach(model => {
         const option = document.createElement('option');
         option.value = model.id;
@@ -124,6 +135,12 @@ function populateModels(models) {
 function populateServices(services) {
     const servicesContainer = document.getElementById('services-container');
     servicesContainer.innerHTML = '';
+
+    if (!services || !Array.isArray(services)) {
+        console.error("Ошибка: services не определен или не является массивом");
+        return;
+    }
+
     services.forEach(service => {
         const label = document.createElement('label');
         label.innerHTML = `
@@ -157,6 +174,7 @@ function populateTimeSlots(duration) {
     const slots = calculateTimeSlots(duration);
     const timeSlotsContainer = document.querySelector('.time-slots');
     timeSlotsContainer.innerHTML = '';
+
     slots.forEach(slot => {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'time-slot available';
@@ -282,16 +300,24 @@ document.getElementById('fixed-button').addEventListener('click', async function
 
 // Обновление моделей при выборе марки
 document.getElementById('brand').addEventListener('change', async function () {
-    const brandId = this.value;
-    const models = await dbFunctions.getModels(db, brandId);
-    populateModels(models);
+    try {
+        const brandId = this.value;
+        const models = await dbFunctions.getModels(db, brandId);
+        populateModels(models);
+    } catch (error) {
+        console.error("Ошибка при загрузке моделей:", error);
+    }
 });
 
 // Получение услуг при выборе модели
 document.getElementById('model').addEventListener('change', async function () {
-    const modelId = this.value;
-    const services = await dbFunctions.getServices(db, modelId);
-    populateServices(services);
+    try {
+        const modelId = this.value;
+        const services = await dbFunctions.getServices(db, modelId);
+        populateServices(services);
+    } catch (error) {
+        console.error("Ошибка при загрузке услуг:", error);
+    }
 });
 
 // Добавляем +7 при фокусе на поле ввода телефона
