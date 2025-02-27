@@ -1,10 +1,16 @@
-// Инициализация SQL.js
+// Инициализация SQL.js с безопасным режимом
 async function initDatabase() {
     const sqlPromise = initSqlJs({
-        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+        // Указываем путь к файлам библиотеки (WASM и JS)
+        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
+        // Включаем безопасный режим (используем WebAssembly вместо eval)
+        disableWasm: false, // Убедись, что это false для использования WASM
     });
 
+    // Загружаем файл базы данных
     const dataPromise = fetch('car_wash.db').then(res => res.arrayBuffer());
+
+    // Инициализируем SQL.js и загружаем базу данных
     const [SQL, buf] = await Promise.all([sqlPromise, dataPromise]);
     const db = new SQL.Database(new Uint8Array(buf));
     return db;
@@ -69,5 +75,5 @@ async function saveAppointment(db, clientName, clientPhone, carNumber, modelId, 
     stmt.free();
 }
 
-// Экспортируем функции
+// Экспортируем функции для использования в других файлах
 window.dbFunctions = { initDatabase, getBrands, getModels, getServices, saveAppointment };
