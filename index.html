@@ -104,6 +104,7 @@
                 <div id='readfull' class='readfull'>Читать полностью</div>
                 <div id='more2.svg' class='more2.svg'>
                     <div id='more2.svgfill' class='more2.svgfill'>
+                        <!-- Заменяем стрелку на SVG -->
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width="10" height="10">
                             <path d="M0 3 L5 8 L10 3" stroke="black" stroke-width="1" fill="none"/>
                         </svg>
@@ -137,6 +138,7 @@
                 <div id='readfull' class='readfull'>Скрыть</div>
                 <div id='more2.svg' class='more2.svg'>
                     <div id='more2.svgfill' class='more2.svgfill'>
+                        <!-- Заменяем стрелку на SVG и переворачиваем её -->
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width="10" height="10" style="transform: rotate(180deg);">
                             <path d="M0 3 L5 8 L10 3" stroke="black" stroke-width="1" fill="none"/>
                         </svg>
@@ -237,6 +239,8 @@
                 <h2>Выберите марку и модель автомобиля</h2>
                 <select id="brand" onchange="updateModels()">
                     <option value="">Выберите марку</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Porsche">Porsche</option>
                 </select>
                 <select id="model" disabled>
                     <option value="">Выберите модель</option>
@@ -247,7 +251,8 @@
             <!-- Шаг 2: Выбор услуг -->
             <div id="step2" class="step" style="display: none;">
                 <h2>Выберите услуги</h2>
-                <div id="services-container"></div>
+                <label><input type="checkbox" name="service" value="2500" onchange="updateTotal()"> Мойка (2500₽)</label>
+                <label><input type="checkbox" name="service" value="3000" onchange="updateTotal()"> Тонировка (3000₽)</label>
                 <p>Подытог: <span id="total">0₽</span></p>
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
@@ -255,7 +260,29 @@
             <!-- Шаг 3: Выбор времени -->
             <div id="step3" class="step" style="display: none;">
                 <h2>Выберите время</h2>
-                <div class="time-slots"></div>
+                <div class="day-selector">
+                    <button class="day-button" onclick="changeDay(-1)">
+                        <span class="triangle-left"></span>
+                    </button>
+                    <span id="current-day" class="current-day"></span>
+                    <button class="day-button" onclick="changeDay(1)">
+                        <span class="triangle-right"></span>
+                    </button>
+                </div>
+                <div class="time-slots">
+                    <div class="time-slot available" data-time="09:00">09:00</div>
+                    <div class="time-slot available" data-time="10:00">10:00</div>
+                    <div class="time-slot available" data-time="11:00">11:00</div>
+                    <div class="time-slot available" data-time="12:00">12:00</div>
+                    <div class="time-slot available" data-time="13:00">13:00</div>
+                    <div class="time-slot available" data-time="14:00">14:00</div>
+                    <div class="time-slot available" data-time="15:00">15:00</div>
+                    <div class="time-slot available" data-time="16:00">16:00</div>
+                    <div class="time-slot available" data-time="17:00">17:00</div>
+                    <div class="time-slot available" data-time="18:00">18:00</div>
+                    <div class="time-slot available" data-time="19:00">19:00</div>
+                    <div class="time-slot available" data-time="20:00">20:00</div>
+                </div>
                 <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
             </div>
 
@@ -277,8 +304,6 @@
     </div>
 
     <!-- Подключение JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
-    <script src="database.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
