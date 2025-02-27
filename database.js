@@ -29,7 +29,7 @@ async function getBrands(db) {
 
 // Функция для получения моделей авто по марке
 async function getModels(db, brandId) {
-    const stmt = db.prepare("SELECT * FROM models WHERE brand_id = :brandId");
+    const stmt = db.prepare("SELECT * FROM models");
     stmt.bind({ ':brandId': brandId });
     const models = [];
     while (stmt.step()) {
