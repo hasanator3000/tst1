@@ -44,14 +44,14 @@ function showStep(step) {
     const closeButton = document.querySelector('.close-modal');
 
     if (step === 1) {
-        backButton.style.display = 'none'; // На первом шаге скрываем кнопку "Назад"
-        closeButton.style.display = 'block'; // Крестик отображается
+        backButton.style.display = 'none';
+        closeButton.style.display = 'block';
     } else if (step === 5) {
-        backButton.style.display = 'none'; // На последнем шаге скрываем кнопку "Назад"
-        closeButton.style.display = 'none'; // Крестик скрываем
+        backButton.style.display = 'none';
+        closeButton.style.display = 'none';
     } else {
-        backButton.style.display = 'block'; // На остальных шагах показываем кнопку "Назад"
-        closeButton.style.display = 'block'; // Крестик отображается
+        backButton.style.display = 'block';
+        closeButton.style.display = 'block';
     }
 
     if (step === 4) {
@@ -134,7 +134,7 @@ function populateModels(models) {
 // Заполнение выбора услуг
 function populateServices(services) {
     const servicesContainer = document.getElementById('services-container');
-    servicesContainer.innerHTML = ''; // Очищаем контейнер
+    servicesContainer.innerHTML = '';
 
     if (!services || !Array.isArray(services)) {
         console.error("Ошибка: services не определен или не является массивом");
@@ -161,9 +161,9 @@ function populateServices(services) {
 function calculateTimeSlots(duration) {
     const slots = [];
     let startTime = new Date();
-    startTime.setHours(9, 0, 0); // Начало работы с 9:00
+    startTime.setHours(9, 0, 0);
 
-    while (startTime.getHours() < 20) { // Работа до 20:00
+    while (startTime.getHours() < 20) {
         const endTime = new Date(startTime.getTime() + duration * 60000);
         slots.push({
             start: startTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
@@ -212,35 +212,31 @@ function updateTotal() {
 // Автоматическая капитализация первой буквы каждого слова
 function capitalizeInput(input) {
     input.value = input.value
-        .toLowerCase() // Приводим весь текст к нижнему регистру
-        .split(' ') // Разделяем строку по пробелам
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Капитализируем первую букву каждого слова
-        .join(' '); // Соединяем слова обратно в строку
+        .toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 }
 
 // Валидация поля "ФИО" (только буквы и пробелы)
 function validateName(input) {
-    input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, ''); // Удаляем всё, кроме букв и пробелов
-    capitalizeInput(input); // Применяем капитализацию
-    validateStep4(); // Проверяем валидацию шага 4
+    input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, '');
+    capitalizeInput(input);
+    validateStep4();
 }
 
 // Форматирование номера телефона
 function formatPhone(input) {
-    // Удаляем всё, кроме цифр
     let phone = input.value.replace(/\D/g, '');
 
-    // Если номер начинается с 7 или 8, заменяем на +7
     if (phone.startsWith('7') || phone.startsWith('8')) {
-        phone = phone.substring(1); // Убираем первую цифру (7 или 8)
+        phone = phone.substring(1);
     }
 
-    // Ограничиваем длину номера (10 цифр, без +7)
     if (phone.length > 10) {
         phone = phone.substring(0, 10);
     }
 
-    // Форматируем номер по шаблону +7 (777) 777-77-77
     let formattedPhone = '+7';
     if (phone.length > 0) {
         formattedPhone += ` (${phone.substring(0, 3)}`;
@@ -256,7 +252,7 @@ function formatPhone(input) {
     }
 
     input.value = formattedPhone;
-    validateStep4(); // Проверяем валидацию шага 4
+    validateStep4();
 }
 
 // Валидация данных на шаге 4
@@ -270,8 +266,7 @@ function validateStep4() {
     const phone = phoneInput.value.trim();
     const carNumber = carNumberInput.value.trim();
 
-    // Проверяем, что номер телефона заполнен полностью
-    const isPhoneValid = phone.length === 18; // +7 (777) 777-77-77
+    const isPhoneValid = phone.length === 18;
 
     nextButton.disabled = !(name && isPhoneValid && carNumber);
 }
@@ -289,20 +284,15 @@ function setupStep4Listeners() {
 
 // ------------ Инициализация и обработчики ------------
 
-// ------------ Инициализация и обработчики ------------
-
 // Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function () {
-    console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
     try {
         db = await dbFunctions.initDatabase();
-        console.log("База данных инициализирована"); // Проверка инициализации базы
         const brands = await dbFunctions.getBrands(db);
-        console.log("Марки загружены:", brands); // Проверка загрузки марок
         populateBrands(brands);
         showStep(1);
     } catch (error) {
-        console.error("Ошибка:", error); // Ловим ошибки
+        console.error("Ошибка:", error);
     }
 });
 
@@ -312,19 +302,17 @@ document.getElementById('brand').addEventListener('change', async function () {
         const brandId = this.value;
         if (!brandId) {
             document.getElementById('model').disabled = true;
-            document.getElementById('next1').disabled = true; // Деактивируем кнопку, если марка не выбрана
+            document.getElementById('next1').disabled = true;
             return;
         }
         
         const models = await dbFunctions.getModels(db, brandId);
-        console.log("Полученные модели:", models); // Добавляем лог
-        
         populateModels(models);
         document.getElementById('model').disabled = false;
     } catch (error) {
         console.error("Ошибка при загрузке моделей:", error);
         document.getElementById('model').disabled = true;
-        document.getElementById('next1').disabled = true; // Деактивируем кнопку при ошибке
+        document.getElementById('next1').disabled = true;
     }
 });
 
@@ -332,9 +320,9 @@ document.getElementById('brand').addEventListener('change', async function () {
 document.getElementById('model').addEventListener('change', function () {
     const modelId = this.value;
     if (modelId) {
-        document.getElementById('next1').disabled = false; // Активируем кнопку, если модель выбрана
+        document.getElementById('next1').disabled = false;
     } else {
-        document.getElementById('next1').disabled = true; // Деактивируем кнопку, если модель не выбрана
+        document.getElementById('next1').disabled = true;
     }
 });
 
@@ -343,7 +331,7 @@ document.getElementById('model').addEventListener('change', async function () {
     try {
         const modelId = this.value;
         if (!modelId) {
-            return; // Если модель не выбрана, ничего не делаем
+            return;
         }
         const services = await dbFunctions.getServices(db, modelId);
         populateServices(services);
@@ -362,10 +350,10 @@ document.getElementById('clientPhone').addEventListener('focus', function () {
 
 // Обработка вставки текста в поле "ФИО"
 document.getElementById('clientName').addEventListener('paste', function (event) {
-    event.preventDefault(); // Отменяем стандартное поведение вставки
-    const pastedText = (event.clipboardData || window.clipboardData).getData('text'); // Получаем вставленный текст
-    this.value = pastedText; // Вставляем текст в поле
-    capitalizeInput(this); // Применяем функцию капитализации
+    event.preventDefault();
+    const pastedText = (event.clipboardData || window.clipboardData).getData('text');
+    this.value = pastedText;
+    capitalizeInput(this);
 });
 
 // Скрытие кнопки "Записаться сейчас" при прокрутке до черного поля
@@ -395,17 +383,16 @@ function changeDay(offset) {
 // Функция для обновления отображения текущей даты
 function updateDayDisplay() {
     const currentDayElement = document.getElementById('current-day');
-    const today = new Date(); // Текущая дата
-    today.setDate(today.getDate() + currentDayOffset); // Добавляем смещение
+    const today = new Date();
+    today.setDate(today.getDate() + currentDayOffset);
 
-    // Форматируем дату в формате "ДД.ММ.ГГГГ"
     const formattedDate = today.toLocaleDateString('ru-RU', {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
     });
 
-    currentDayElement.textContent = formattedDate; // Отображаем дату
+    currentDayElement.textContent = formattedDate;
 }
 
 // Инициализация выбора времени
