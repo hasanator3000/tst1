@@ -524,11 +524,21 @@ async function saveAppointment() {
 // Функция для получения названий услуг по их ID
 async function getServiceNamesByIds(db, serviceIds) {
     try {
-        const stmt = db.prepare("SELECT name FROM services WHERE id IN (" + serviceIds.map(() => "?").join(",") + ")");
-        serviceIds.forEach((id, index) => stmt.bind(index + 1, id));
+        if (serviceIds.length === 0) {
+            return []; // Если ID услуг отсутствуют, возвращаем пустой массив
+        }
+
+        // Создаем SQL-запрос с динамическим количеством параметров
+        const query = `SELECT name FROM services WHERE id IN (${serviceIds.map(() => "?").join(",")})`;
+        const stmt = db.prepare(query);
+
+        // Привязываем параметры (ID услуг)
+        serviceIds.forEach((id, index) => stmt.bind(index + 1, parseInt(id)));
+
         const serviceNames = [];
         while (stmt.step()) {
-            serviceNames.push(stmt.get().name);
+            const result = stmt.getAsObject();
+            serviceNames.push(result.name); // Добавляем название услуги в массив
         }
         stmt.free();
         return serviceNames;
