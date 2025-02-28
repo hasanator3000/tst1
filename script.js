@@ -16,19 +16,11 @@ function toggleReadMore() {
         readFullButton.style.display = 'none';
         hideButton.style.display = 'block';
         gradientOverlay.style.display = 'none';
-
-        // Меняем стрелку на кнопке "Скрыть" (теперь направлена вверх)
-        const arrowIcon = hideButton.querySelector('.more2.svg3');
-        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAALCAYAAACgR9dcAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA0SURBVHgB7YwxDsAgCEOpdP//sktjiB7s4BQfD4xrRAwKQ7XWZk6YVWvtk5n5Y4Q2pZQv+QN+hw4T3kqFJAAAAABJRU5ErkJggg=='; // Стрелка вверх
     } else {
         hiddenText.style.display = 'none';
         readFullButton.style.display = 'block';
         hideButton.style.display = 'none';
         gradientOverlay.style.display = 'block';
-
-        // Возвращаем исходную стрелку (вниз)
-        const arrowIcon = readFullButton.querySelector('.more2.svg3');
-        arrowIcon.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAABJSURBVHgB1YtRDQAgCAWJYAQiGI0G2sAoRjKK4iabYyL++rb7gTuAPxeZZPyQqUyQAzH9EEyxLXB/ZBWYog6KJ+rAFWX0Kl43AHdjEHGmKDxFAAAAAElFTkSuQmCC'; // Стрелка вниз
     }
 }
 
@@ -117,9 +109,15 @@ function populateBrands(brands) {
 function populateModels(models) {
     const modelSelect = document.getElementById('model');
     modelSelect.innerHTML = '<option value="">Выберите модель</option>';
+    modelSelect.disabled = true;
 
-    if (!models || !Array.isArray(models)) {
-        console.error("Ошибка: models не определен или не является массивом");
+    if (!Array.isArray(models)) {
+        console.error("Models не является массивом");
+        return;
+    }
+
+    if (models.length === 0) {
+        console.warn("Нет доступных моделей для выбранной марки");
         return;
     }
 
@@ -129,6 +127,8 @@ function populateModels(models) {
         option.textContent = model.name;
         modelSelect.appendChild(option);
     });
+    
+    modelSelect.disabled = false;
 }
 
 // Заполнение выбора услуг
@@ -302,10 +302,19 @@ document.getElementById('fixed-button').addEventListener('click', async function
 document.getElementById('brand').addEventListener('change', async function () {
     try {
         const brandId = this.value;
+        if (!brandId) {
+            document.getElementById('model').disabled = true;
+            return;
+        }
+        
         const models = await dbFunctions.getModels(db, brandId);
+        console.log("Полученные модели:", models); // Добавляем лог
+        
         populateModels(models);
+        document.getElementById('model').disabled = false;
     } catch (error) {
         console.error("Ошибка при загрузке моделей:", error);
+        document.getElementById('model').disabled = true;
     }
 });
 
