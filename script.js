@@ -281,6 +281,13 @@ function validateStep4() {
     const isPhoneValid = phone.length === 18;
 
     nextButton.disabled = !(name && isPhoneValid && carNumber);
+
+    // Добавляем обработчик для кнопки "Продолжить"
+    if (!nextButton.disabled) {
+        nextButton.addEventListener('click', nextStep);
+    } else {
+        nextButton.removeEventListener('click', nextStep);
+    }
 }
 
 // Добавляем обработчики событий для полей ввода на шаге 4
