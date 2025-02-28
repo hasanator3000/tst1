@@ -143,7 +143,7 @@ function populateServices(services) {
 
     if (services.length === 0) {
         console.warn("Нет доступных услуг для выбранной модели");
-        servicesContainer.innerHTML = '<p>Нет доступных услуг для выбранной модели.</p>';
+        servicesContainer.innerHTML = '<p>Услуги для данного авто пока что добавляются, скоро все исправим)</p>';
         return;
     }
 
