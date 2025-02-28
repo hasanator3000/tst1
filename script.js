@@ -65,13 +65,18 @@ function showStep(step) {
 }
 
 // Переход к следующему шагу
-function nextStep(step) {
-    if (step === 5) {
-        saveAppointment();
+function nextStep() {
+    const currentStep = document.querySelector('.step[style="display: flex;"]');
+    if (!currentStep) return;
+
+    const currentStepNumber = parseInt(currentStep.id.replace('step', ''));
+    const nextStepNumber = currentStepNumber + 1;
+
+    if (nextStepNumber === 5) {
+        saveAppointment(); // Если это последний шаг, сохраняем запись
     } else {
-        showStep(step + 1);
+        showStep(nextStepNumber); // Переходим на следующий шаг
     }
-    updateConfirmButton(); // Обновляем состояние кнопки
 }
 
 // Переход на предыдущий шаг
