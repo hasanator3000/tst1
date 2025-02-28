@@ -281,13 +281,6 @@ function validateStep4() {
     const isPhoneValid = phone.length === 18;
 
     nextButton.disabled = !(name && isPhoneValid && carNumber);
-
-    // Добавляем обработчик для кнопки "Продолжить"
-    if (!nextButton.disabled) {
-        nextButton.addEventListener('click', nextStep);
-    } else {
-        nextButton.removeEventListener('click', nextStep);
-    }
 }
 
 // Добавляем обработчики событий для полей ввода на шаге 4
@@ -466,3 +459,40 @@ document.querySelectorAll('.time-slot').forEach(function (slot) {
         }
     });
 });
+
+// ------------ Функция для сохранения записи ------------
+async function saveAppointment() {
+    if (!db) {
+        console.error("База данных не инициализирована");
+        return;
+    }
+
+    // Собираем данные из формы
+    const clientName = document.getElementById('clientName').value;
+    const clientPhone = document.getElementById('clientPhone').value;
+    const clientCarNumber = document.getElementById('clientCarNumber').value;
+
+    // Получаем выбранные услуги
+    const selectedServices = Array.from(document.querySelectorAll('input[name="service"]:checked'))
+        .map(service => service.value);
+
+    // Получаем выбранное время
+    const selectedTimeSlot = document.querySelector('.time-slot.selected');
+    if (!selectedTimeSlot) {
+        console.error("Время не выбрано");
+        return;
+    }
+    const [startTime, endTime] = selectedTimeSlot.textContent.split(' - ');
+
+    // Получаем выбранную модель
+    const modelId = document.getElementById('model').value;
+
+    try {
+        // Вызываем функцию saveAppointment из database.js
+        await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
+        console.log("Запись успешно сохранена");
+        showStep(5); // Переходим на шаг 5 (успешная запись)
+    } catch (error) {
+        console.error("Ошибка при сохранении записи:", error);
+    }
+}
