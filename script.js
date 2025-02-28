@@ -330,8 +330,9 @@ document.getElementById('brand').addEventListener('change', async function () {
             return;
         }
         
+        console.log("Загружаем модели для марки с ID:", brandId); // Логирование
         const models = await dbFunctions.getModels(db, brandId);
-        console.log("Полученные модели:", models); // Добавляем лог
+        console.log("Полученные модели:", models); // Логирование
         
         populateModels(models);
         document.getElementById('model').disabled = false;
@@ -359,8 +360,11 @@ document.getElementById('model').addEventListener('change', async function () {
         if (!modelId) {
             return; // Если модель не выбрана, ничего не делаем
         }
+        
+        console.log("Загружаем услуги для модели с ID:", modelId); // Логирование
         const services = await dbFunctions.getServices(db, modelId);
-        console.log("Загружены услуги для модели", modelId, ":", services); // Логирование
+        console.log("Загружены услуги:", services); // Логирование
+        
         populateServices(services);
     } catch (error) {
         console.error("Ошибка при загрузке услуг:", error);
