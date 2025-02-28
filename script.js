@@ -283,6 +283,8 @@ function setupStep4Listeners() {
 
 // ------------ Инициализация и обработчики ------------
 
+// ------------ Инициализация и обработчики ------------
+
 // Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function () {
     console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
@@ -304,6 +306,7 @@ document.getElementById('brand').addEventListener('change', async function () {
         const brandId = this.value;
         if (!brandId) {
             document.getElementById('model').disabled = true;
+            document.getElementById('next1').disabled = true; // Деактивируем кнопку, если марка не выбрана
             return;
         }
         
@@ -315,6 +318,17 @@ document.getElementById('brand').addEventListener('change', async function () {
     } catch (error) {
         console.error("Ошибка при загрузке моделей:", error);
         document.getElementById('model').disabled = true;
+        document.getElementById('next1').disabled = true; // Деактивируем кнопку при ошибке
+    }
+});
+
+// Активация кнопки "Подтвердить" при выборе модели
+document.getElementById('model').addEventListener('change', function () {
+    const modelId = this.value;
+    if (modelId) {
+        document.getElementById('next1').disabled = false; // Активируем кнопку, если модель выбрана
+    } else {
+        document.getElementById('next1').disabled = true; // Деактивируем кнопку, если модель не выбрана
     }
 });
 
@@ -322,6 +336,9 @@ document.getElementById('brand').addEventListener('change', async function () {
 document.getElementById('model').addEventListener('change', async function () {
     try {
         const modelId = this.value;
+        if (!modelId) {
+            return; // Если модель не выбрана, ничего не делаем
+        }
         const services = await dbFunctions.getServices(db, modelId);
         populateServices(services);
     } catch (error) {
