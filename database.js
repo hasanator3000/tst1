@@ -4,7 +4,7 @@ async function initDatabase() {
         // Указываем путь к файлам библиотеки (WASM и JS)
         locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`,
         // Включаем безопасный режим (используем WebAssembly вместо eval)
-        disableWasm: false, // Убедись, что это false для использования WASM
+        disableWasm: false, // Убедитесь, что это false для использования WASM
     });
 
     // Загружаем файл базы данных
