@@ -32,7 +32,7 @@ document.getElementById('fixed-button').addEventListener('click', function () {
     showStep(1);
 });
 
-// Показ текущего шаг и скрытие остальных
+// Показ текущего шага и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
         stepElement.style.display = 'none';
@@ -487,9 +487,25 @@ async function saveAppointment() {
     // Получаем выбранную модель
     const modelId = document.getElementById('model').value;
 
+    // Создаем объект записи
+    const appointment = {
+        clientName,
+        clientPhone,
+        carNumber: clientCarNumber,
+        modelId,
+        serviceIds: selectedServices,
+        startTime,
+        endTime,
+        timestamp: new Date().toLocaleString() // Добавляем время создания записи
+    };
+
     try {
-        // Вызываем функцию saveAppointment из database.js
+        // Сохраняем запись в базу данных
         await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
+        
+        // Сохраняем запись в LocalStorage
+        saveAppointmentToLocalStorage(appointment);
+        
         console.log("Запись успешно сохранена");
         showStep(5); // Переходим на шаг 5 (успешная запись)
     } catch (error) {
@@ -497,9 +513,23 @@ async function saveAppointment() {
     }
 }
 
+// Функция для сохранения записи в LocalStorage
+function saveAppointmentToLocalStorage(appointment) {
+    const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    appointments.push(appointment);
+    localStorage.setItem('appointments', JSON.stringify(appointments));
+    console.log('Запись сохранена в LocalStorage:', appointment);
+}
+
+// Функция для получения всех записей из LocalStorage
+function getAppointmentsFromLocalStorage() {
+    const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+    console.log('Записи из LocalStorage:', appointments);
+    return appointments;
+}
+
 // Функция для скачивания данных в виде текстового файла
 function downloadAppointmentsAsFile() {
-    // Получаем все записи из LocalStorage
     const appointments = getAppointmentsFromLocalStorage();
 
     // Преобразуем записи в текстовый формат
