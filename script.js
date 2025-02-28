@@ -487,8 +487,10 @@ async function saveAppointment() {
     // Получаем выбранную модель
     const modelId = document.getElementById('model').value;
 
-    // Получаем названия услуг
-    const serviceNames = await getServiceNamesByIds(db, selectedServices);
+    // Получаем названия услуг (только если есть выбранные услуги)
+    const serviceNames = selectedServices.length > 0
+        ? await getServiceNamesByIds(db, selectedServices)
+        : [];
 
     // Получаем марку и модель
     const brandAndModelName = await getBrandAndModelName(db, modelId);
@@ -608,4 +610,4 @@ function addDownloadButton() {
 }
 
 // Вызов функции для добавления кнопки
-addDownloadButton();
+addDownloadButton();ы
