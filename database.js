@@ -96,3 +96,4 @@ async function saveAppointment(db, clientName, clientPhone, carNumber, modelId, 
 
 // Экспортируем функции для использования в других файлах
 window.dbFunctions = { initDatabase, getBrands, getModels, getServices, saveAppointment };
+
