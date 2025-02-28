@@ -487,11 +487,6 @@ async function saveAppointment() {
     // Получаем выбранную модель
     const modelId = document.getElementById('model').value;
 
-    // Получаем названия услуг (только если есть выбранные услуги)
-    const serviceNames = selectedServices.length > 0
-        ? await getServiceNamesByIds(db, selectedServices)
-        : [];
-
     // Получаем марку и модель
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
@@ -501,7 +496,7 @@ async function saveAppointment() {
         clientPhone,
         carNumber: clientCarNumber,
         model: brandAndModelName, // Используем название марки и модели
-        services: serviceNames, // Используем названия услуг
+        services: selectedServices, // Используем ID услуг
         startTime,
         endTime,
         timestamp: new Date().toLocaleString() // Добавляем время создания записи
@@ -518,33 +513,6 @@ async function saveAppointment() {
         showStep(5); // Переходим на шаг 5 (успешная запись)
     } catch (error) {
         console.error("Ошибка при сохранении записи:", error);
-    }
-}
-
-// Функция для получения названий услуг по их ID
-async function getServiceNamesByIds(db, serviceIds) {
-    try {
-        if (serviceIds.length === 0) {
-            return []; // Если ID услуг отсутствуют, возвращаем пустой массив
-        }
-
-        // Создаем SQL-запрос с динамическим количеством параметров
-        const query = `SELECT name FROM services WHERE id IN (${serviceIds.map(() => "?").join(",")})`;
-        const stmt = db.prepare(query);
-
-        // Привязываем параметры (ID услуг)
-        serviceIds.forEach((id, index) => stmt.bind(index + 1, parseInt(id)));
-
-        const serviceNames = [];
-        while (stmt.step()) {
-            const result = stmt.getAsObject();
-            serviceNames.push(result.name); // Добавляем название услуги в массив
-        }
-        stmt.free();
-        return serviceNames;
-    } catch (error) {
-        console.error("Ошибка при получении названий услуг:", error);
-        return [];
     }
 }
 
@@ -620,4 +588,4 @@ function addDownloadButton() {
 }
 
 // Вызов функции для добавления кнопки
-addDownloadButton();ы
+addDownloadButton();
