@@ -54,6 +54,12 @@ function showStep(step) {
         closeButton.style.display = 'block'; // Крестик отображается
     }
 
+    // Деактивируем кнопку "Подтвердить" на втором шаге, если не выбрано ни одной услуги
+    if (step === 2) {
+        const selectedServices = document.querySelectorAll('input[name="service"]:checked');
+        document.getElementById('next2').disabled = selectedServices.length === 0;
+    }
+
     if (step === 4) {
         validateStep4();
         setupStep4Listeners();
@@ -155,6 +161,9 @@ function populateServices(services) {
         `;
         servicesContainer.appendChild(label);
     });
+
+    // Обновляем итог и активируем/деактивируем кнопку "Подтвердить"
+    updateTotal();
 }
 
 // Расчет временных слотов
@@ -194,7 +203,7 @@ function populateTimeSlots(duration) {
     });
 }
 
-// Обновление подытога
+// Обновление подытога и активация кнопки "Подтвердить"
 function updateTotal() {
     const selectedServices = document.querySelectorAll('input[name="service"]:checked');
     let total = 0;
@@ -205,6 +214,13 @@ function updateTotal() {
     });
     document.getElementById('total').textContent = `${total}₽`;
     populateTimeSlots(totalDuration);
+
+    // Активируем кнопку "Подтвердить", если выбрана хотя бы одна услуга
+    if (selectedServices.length > 0) {
+        document.getElementById('next2').disabled = false;
+    } else {
+        document.getElementById('next2').disabled = true;
+    }
 }
 
 // ------------ Валидация и форматирование ------------
@@ -289,8 +305,6 @@ function setupStep4Listeners() {
 
 // ------------ Инициализация и обработчики ------------
 
-// ------------ Инициализация и обработчики ------------
-
 // Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function () {
     console.log("Кнопка нажата"); // Проверка, что обработчик срабатывает
@@ -346,6 +360,7 @@ document.getElementById('model').addEventListener('change', async function () {
             return; // Если модель не выбрана, ничего не делаем
         }
         const services = await dbFunctions.getServices(db, modelId);
+        console.log("Загружены услуги для модели", modelId, ":", services); // Логирование
         populateServices(services);
     } catch (error) {
         console.error("Ошибка при загрузке услуг:", error);
