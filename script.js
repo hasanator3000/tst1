@@ -134,17 +134,23 @@ function populateModels(models) {
 // Заполнение выбора услуг
 function populateServices(services) {
     const servicesContainer = document.getElementById('services-container');
-    servicesContainer.innerHTML = '';
+    servicesContainer.innerHTML = ''; // Очищаем контейнер
 
     if (!services || !Array.isArray(services)) {
         console.error("Ошибка: services не определен или не является массивом");
         return;
     }
 
+    if (services.length === 0) {
+        console.warn("Нет доступных услуг для выбранной модели");
+        servicesContainer.innerHTML = '<p>Нет доступных услуг для выбранной модели.</p>';
+        return;
+    }
+
     services.forEach(service => {
         const label = document.createElement('label');
         label.innerHTML = `
-            <input type="checkbox" name="service" value="${service.id}" data-duration="${service.duration}" onchange="updateTotal()">
+            <input type="checkbox" name="service" value="${service.id}" data-price="${service.price}" data-duration="${service.duration}" onchange="updateTotal()">
             ${service.name} (${service.price}₽, ${service.duration} мин)
         `;
         servicesContainer.appendChild(label);
