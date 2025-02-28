@@ -32,7 +32,7 @@ document.getElementById('fixed-button').addEventListener('click', function () {
     showStep(1);
 });
 
-// Показ текущего шага и скрытие остальных
+// Показ текущего шаг и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
         stepElement.style.display = 'none';
@@ -496,3 +496,44 @@ async function saveAppointment() {
         console.error("Ошибка при сохранении записи:", error);
     }
 }
+
+// Функция для скачивания данных в виде текстового файла
+function downloadAppointmentsAsFile() {
+    // Получаем все записи из LocalStorage
+    const appointments = getAppointmentsFromLocalStorage();
+
+    // Преобразуем записи в текстовый формат
+    const data = appointments.map(appointment => 
+        `Имя: ${appointment.clientName}\n` +
+        `Телефон: ${appointment.clientPhone}\n` +
+        `Номер авто: ${appointment.carNumber}\n` +
+        `Модель: ${appointment.modelId}\n` +
+        `Услуги: ${appointment.serviceIds.join(', ')}\n` +
+        `Время: ${appointment.startTime} - ${appointment.endTime}\n` +
+        `Дата записи: ${appointment.timestamp}\n` +
+        '---------------------------'
+    ).join('\n');
+
+    // Создаем Blob (бинарный объект) с данными
+    const blob = new Blob([data], { type: 'text/plain' });
+
+    // Создаем ссылку для скачивания
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'appointments.txt'; // Имя файла
+    link.click();
+
+    // Освобождаем память
+    URL.revokeObjectURL(link.href);
+}
+
+// Добавляем кнопку для скачивания файла
+function addDownloadButton() {
+    const downloadButton = document.createElement('button');
+    downloadButton.textContent = 'Скачать записи';
+    downloadButton.addEventListener('click', downloadAppointmentsAsFile);
+    document.body.appendChild(downloadButton);
+}
+
+// Вызов функции для добавления кнопки
+addDownloadButton();
