@@ -487,13 +487,19 @@ async function saveAppointment() {
     // Получаем выбранную модель
     const modelId = document.getElementById('model').value;
 
+    // Получаем названия услуг
+    const serviceNames = await getServiceNamesByIds(db, selectedServices);
+
+    // Получаем марку и модель
+    const brandAndModelName = await getBrandAndModelName(db, modelId);
+
     // Создаем объект записи
     const appointment = {
         clientName,
         clientPhone,
         carNumber: clientCarNumber,
-        modelId,
-        serviceIds: selectedServices,
+        model: brandAndModelName, // Используем название марки и модели
+        services: serviceNames, // Используем названия услуг
         startTime,
         endTime,
         timestamp: new Date().toLocaleString() // Добавляем время создания записи
@@ -510,6 +516,42 @@ async function saveAppointment() {
         showStep(5); // Переходим на шаг 5 (успешная запись)
     } catch (error) {
         console.error("Ошибка при сохранении записи:", error);
+    }
+}
+
+// Функция для получения названий услуг по их ID
+async function getServiceNamesByIds(db, serviceIds) {
+    try {
+        const stmt = db.prepare("SELECT name FROM services WHERE id IN (" + serviceIds.map(() => "?").join(",") + ")");
+        serviceIds.forEach((id, index) => stmt.bind(index + 1, id));
+        const serviceNames = [];
+        while (stmt.step()) {
+            serviceNames.push(stmt.get().name);
+        }
+        stmt.free();
+        return serviceNames;
+    } catch (error) {
+        console.error("Ошибка при получении названий услуг:", error);
+        return [];
+    }
+}
+
+// Функция для получения марки и модели по ID модели
+async function getBrandAndModelName(db, modelId) {
+    try {
+        const stmt = db.prepare(`
+            SELECT b.name AS brandName, m.name AS modelName
+            FROM models m
+            JOIN brands b ON m.brand_id = b.id
+            WHERE m.id = $modelId
+        `);
+        stmt.bind({ $modelId: modelId });
+        const result = stmt.step() ? stmt.getAsObject() : null;
+        stmt.free();
+        return result ? `${result.brandName} ${result.modelName}` : "Неизвестная модель";
+    } catch (error) {
+        console.error("Ошибка при получении марки и модели:", error);
+        return "Неизвестная модель";
     }
 }
 
@@ -532,13 +574,13 @@ function getAppointmentsFromLocalStorage() {
 function downloadAppointmentsAsFile() {
     const appointments = getAppointmentsFromLocalStorage();
 
-        // Преобразуем записи в текстовый формат
+    // Преобразуем записи в текстовый формат
     const data = appointments.map(appointment => 
         `Имя: ${appointment.clientName}\n` +
         `Телефон: ${appointment.clientPhone}\n` +
         `Номер авто: ${appointment.carNumber}\n` +
-        `Модель: ${appointment.modelId.value}\n` +
-        `Услуги: ${appointment.serviceIds.join(', ').value}\n` +
+        `Модель: ${appointment.model}\n` +
+        `Услуги: ${appointment.services.join(', ')}\n` +
         `Время: ${appointment.startTime} - ${appointment.endTime}\n` +
         `Дата записи: ${appointment.timestamp}\n` +
         '---------------------------'
