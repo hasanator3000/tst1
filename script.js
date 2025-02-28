@@ -27,7 +27,7 @@ function toggleReadMore() {
 // ------------ Функции для модального окна ------------
 
 // Открытие модального окна
-document.getElementById('fixed-button').addEventListener('click', function() {
+document.getElementById('fixed-button').addEventListener('click', function () {
     document.getElementById('modal').style.display = 'flex';
     showStep(1);
 });
@@ -54,6 +54,10 @@ function showStep(step) {
         closeButton.style.display = 'block';
     }
 
+    // Обновляем состояние кнопки "Подтвердить"
+    updateConfirmButton();
+
+    // Дополнительные действия для шага 4
     if (step === 4) {
         validateStep4();
         setupStep4Listeners();
@@ -65,8 +69,9 @@ function nextStep(step) {
     if (step === 5) {
         saveAppointment();
     } else {
-        showStep(step);
+        showStep(step + 1);
     }
+    updateConfirmButton(); // Обновляем состояние кнопки
 }
 
 // Переход на предыдущий шаг
@@ -78,6 +83,7 @@ function prevStep() {
             showStep(currentStepNumber - 1);
         }
     }
+    updateConfirmButton(); // Обновляем состояние кнопки
 }
 
 // Закрытие модального окна
@@ -127,7 +133,7 @@ function populateModels(models) {
         option.textContent = model.name;
         modelSelect.appendChild(option);
     });
-    
+
     modelSelect.disabled = false;
 }
 
@@ -188,7 +194,7 @@ function populateTimeSlots(duration) {
         slotDiv.addEventListener('click', function () {
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
             this.classList.add('selected');
-            document.getElementById('next3').disabled = false;
+            updateConfirmButton(); // Обновляем состояние кнопки
         });
         timeSlotsContainer.appendChild(slotDiv);
     });
@@ -205,6 +211,7 @@ function updateTotal() {
     });
     document.getElementById('total').textContent = `${total}₽`;
     populateTimeSlots(totalDuration);
+    updateConfirmButton(); // Обновляем состояние кнопки
 }
 
 // ------------ Валидация и форматирование ------------
@@ -282,6 +289,45 @@ function setupStep4Listeners() {
     carNumberInput.addEventListener('input', validateStep4);
 }
 
+// ------------ Обновление состояния кнопки "Подтвердить" ------------
+
+function updateConfirmButton() {
+    const currentStep = document.querySelector('.step[style="display: flex;"]');
+    if (!currentStep) return;
+
+    const stepNumber = parseInt(currentStep.id.replace('step', ''));
+    const confirmButton = document.getElementById(`next${stepNumber}`);
+
+    switch (stepNumber) {
+        case 1:
+            // Шаг 1: Выбор марки и модели
+            const brandSelected = document.getElementById('brand').value;
+            const modelSelected = document.getElementById('model').value;
+            confirmButton.disabled = !(brandSelected && modelSelected);
+            break;
+
+        case 2:
+            // Шаг 2: Выбор услуг
+            const servicesSelected = document.querySelectorAll('input[name="service"]:checked').length > 0;
+            confirmButton.disabled = !servicesSelected;
+            break;
+
+        case 3:
+            // Шаг 3: Выбор времени
+            const timeSlotSelected = document.querySelector('.time-slot.selected');
+            confirmButton.disabled = !timeSlotSelected;
+            break;
+
+        case 4:
+            // Шаг 4: Ввод данных клиента
+            validateStep4(); // Используем уже существующую функцию валидации
+            break;
+
+        default:
+            confirmButton.disabled = false;
+    }
+}
+
 // ------------ Инициализация и обработчики ------------
 
 // Инициализация базы данных при открытии модального окна
@@ -305,7 +351,7 @@ document.getElementById('brand').addEventListener('change', async function () {
             document.getElementById('next1').disabled = true;
             return;
         }
-        
+
         const models = await dbFunctions.getModels(db, brandId);
         populateModels(models);
         document.getElementById('model').disabled = false;
@@ -324,6 +370,7 @@ document.getElementById('model').addEventListener('change', function () {
     } else {
         document.getElementById('next1').disabled = true;
     }
+    updateConfirmButton(); // Обновляем состояние кнопки
 });
 
 // Получение услуг при выборе модели
@@ -403,7 +450,7 @@ document.querySelectorAll('.time-slot').forEach(function (slot) {
                 s.classList.remove('selected');
             });
             slot.classList.add('selected');
-            document.getElementById('next3').disabled = false;
+            updateConfirmButton(); // Обновляем состояние кнопки
         }
     });
 });
