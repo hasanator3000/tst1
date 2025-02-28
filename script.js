@@ -532,13 +532,13 @@ function getAppointmentsFromLocalStorage() {
 function downloadAppointmentsAsFile() {
     const appointments = getAppointmentsFromLocalStorage();
 
-    // Преобразуем записи в текстовый формат
+        // Преобразуем записи в текстовый формат
     const data = appointments.map(appointment => 
         `Имя: ${appointment.clientName}\n` +
         `Телефон: ${appointment.clientPhone}\n` +
         `Номер авто: ${appointment.carNumber}\n` +
-        `Модель: ${appointment.modelId}\n` +
-        `Услуги: ${appointment.serviceIds.join(', ')}\n` +
+        `Модель: ${appointment.modelId.value}\n` +
+        `Услуги: ${appointment.serviceIds.join(', ').value}\n` +
         `Время: ${appointment.startTime} - ${appointment.endTime}\n` +
         `Дата записи: ${appointment.timestamp}\n` +
         '---------------------------'
