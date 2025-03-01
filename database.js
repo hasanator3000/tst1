@@ -52,13 +52,27 @@ async function getModels(db, brandId) {
 // Функция для получения услуг и цен по модели авто
 async function getServices(db, modelId) {
     try {
+        // Получаем класс автомобиля по модели
+        const classStmt = db.prepare("SELECT class_id FROM models WHERE id = $modelId");
+        classStmt.bind({ $modelId: parseInt(modelId) });
+        const classResult = classStmt.step() ? classStmt.getAsObject() : null;
+        classStmt.free();
+
+        if (!classResult) {
+            console.error("Класс автомобиля не найден");
+            return [];
+        }
+
+        const classId = classResult.class_id;
+
+        // Получаем услуги и цены для этого класса
         const stmt = db.prepare(`
             SELECT s.id, s.name, s.duration, p.price 
             FROM services s
             JOIN prices p ON s.id = p.service_id
-            WHERE p.model_id = $modelId
+            WHERE p.class_id = $classId
         `);
-        stmt.bind({ $modelId: parseInt(modelId) });
+        stmt.bind({ $classId: classId });
         const services = [];
         while (stmt.step()) {
             services.push(stmt.getAsObject());
@@ -70,7 +84,6 @@ async function getServices(db, modelId) {
         return [];
     }
 }
-
 // Функция для сохранения записи
 async function saveAppointment(db, clientName, clientPhone, carNumber, modelId, serviceIds, startTime, endTime) {
     try {
