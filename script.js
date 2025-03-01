@@ -4,23 +4,25 @@ let currentDayOffset = 0; // Смещение для выбора даты
 
 // ------------ Общие функции интерфейса ------------
 
-// Функция для кнопки "Читать полностью"
+// Функция для кнопки "Читать полностью" и "Скрыть"
 function toggleReadMore() {
     const hiddenText = document.getElementById('hidden-text');
     const readFullButton = document.getElementById('text1');
     const hideButton = document.getElementById('hide-button');
     const gradientOverlay = document.getElementById('gradient-overlay');
 
-    if (hiddenText.style.display === 'none') {
-        hiddenText.style.display = 'block';
-        readFullButton.style.display = 'none';
-        hideButton.style.display = 'block';
-        gradientOverlay.style.display = 'none';
+    if (hiddenText.classList.contains('open')) {
+        // Закрываем текст
+        hiddenText.classList.remove('open');
+        gradientOverlay.style.opacity = '1'; // Показываем градиент
+        readFullButton.style.display = 'block'; // Показываем кнопку "Читать полностью"
+        hideButton.style.display = 'none'; // Скрываем кнопку "Скрыть"
     } else {
-        hiddenText.style.display = 'none';
-        readFullButton.style.display = 'block';
-        hideButton.style.display = 'none';
-        gradientOverlay.style.display = 'block';
+        // Открываем текст
+        hiddenText.classList.add('open');
+        gradientOverlay.style.opacity = '0'; // Скрываем градиент
+        readFullButton.style.display = 'none'; // Скрываем кнопку "Читать полностью"
+        hideButton.style.display = 'block'; // Показываем кнопку "Скрыть"
     }
 }
 
@@ -242,13 +244,27 @@ function updateTotal() {
     const selectedServices = document.querySelectorAll('input[name="service"]:checked');
     let total = 0;
     let totalDuration = 0;
+
+    // Считаем общую стоимость и длительность выбранных услуг
     selectedServices.forEach(service => {
         total += parseInt(service.dataset.price);
         totalDuration += parseInt(service.dataset.duration);
     });
+
+    // Обновляем подытог
     document.getElementById('total').textContent = `${total}₽`;
-    populateTimeSlots(totalDuration);
-    updateConfirmButton(); // Обновляем состояние кнопки
+
+    // Если выбрана хотя бы одна услуга, обновляем временные слоты
+    if (selectedServices.length > 0) {
+        populateTimeSlots(totalDuration);
+    } else {
+        // Если ни одна услуга не выбрана, очищаем временные слоты
+        const timeSlotsContainer = document.querySelector('.time-slots');
+        timeSlotsContainer.innerHTML = '';
+    }
+
+    // Обновляем состояние кнопки "Подтвердить"
+    updateConfirmButton();
 }
 
 // ------------ Валидация и форматирование ------------
@@ -326,8 +342,8 @@ function setupStep4Listeners() {
     carNumberInput.addEventListener('input', validateStep4);
 }
 
-// ------------ Обновление состояния кнопки "Подтвердить" ------------
 
+// Обновление состояния кнопки "Подтвердить"
 function updateConfirmButton() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
@@ -620,5 +636,3 @@ function addDownloadButton() {
 
 // Вызов функции для добавления кнопки
 addDownloadButton();
-
-
