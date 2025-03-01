@@ -235,9 +235,15 @@ function populateTimeSlots(duration) {
         slotDiv.addEventListener('click', function () {
             const isSelected = this.classList.contains('selected');
 
-            // Снимаем выделение со всех слотов
-            document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-
+            // Если слот уже выбран, снимаем выделение
+            if (isSelected) {
+                this.classList.remove('selected');
+            } else {
+                // Снимаем выделение со всех слотов
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                // Выделяем текущий слот
+                this.classList.add('selected');
+            }
 
             // Обновляем состояние кнопки "Подтвердить"
             updateConfirmButton();
