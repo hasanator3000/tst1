@@ -253,6 +253,7 @@ function populateTimeSlots(duration) {
     });
 }
 
+
 // Обновление подытога
 function updateTotal() {
     const selectedServices = document.querySelectorAll('input[name="service"]:checked');
