@@ -230,11 +230,23 @@ function populateTimeSlots(duration) {
         const slotDiv = document.createElement('div');
         slotDiv.className = 'time-slot available';
         slotDiv.textContent = `${slot.start} - ${slot.end}`;
+
+        // Обработчик клика для выбора/отмены выбора слота
         slotDiv.addEventListener('click', function () {
+            const isSelected = this.classList.contains('selected');
+
+            // Снимаем выделение со всех слотов
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-            this.classList.add('selected');
-            updateConfirmButton(); // Обновляем состояние кнопки
+
+            // Если слот не был выбран, выделяем его
+            if (!isSelected) {
+                this.classList.add('selected');
+            }
+
+            // Обновляем состояние кнопки "Подтвердить"
+            updateConfirmButton();
         });
+
         timeSlotsContainer.appendChild(slotDiv);
     });
 }
