@@ -238,10 +238,6 @@ function populateTimeSlots(duration) {
             // Снимаем выделение со всех слотов
             document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
 
-            // Если слот не был выбран, выделяем его
-            if (!isSelected) {
-                this.classList.add('selected');
-            }
 
             // Обновляем состояние кнопки "Подтвердить"
             updateConfirmButton();
