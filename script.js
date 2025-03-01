@@ -516,25 +516,6 @@ async function saveAppointment() {
     }
 }
 
-// Функция для получения марки и модели по ID модели
-async function getBrandAndModelName(db, modelId) {
-    try {
-        const stmt = db.prepare(`
-            SELECT b.name AS brandName, m.name AS modelName
-            FROM models m
-            JOIN brands b ON m.brand_id = b.id
-            WHERE m.id = $modelId
-        `);
-        stmt.bind({ $modelId: modelId });
-        const result = stmt.step() ? stmt.getAsObject() : null;
-        stmt.free();
-        return result ? `${result.brandName} ${result.modelName}` : "Неизвестная модель";
-    } catch (error) {
-        console.error("Ошибка при получении марки и модели:", error);
-        return "Неизвестная модель";
-    }
-}
-
 // Функция для сохранения записи в LocalStorage
 function saveAppointmentToLocalStorage(appointment) {
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
