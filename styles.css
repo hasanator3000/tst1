@@ -618,3 +618,33 @@ input[type="tel"]:focus {
 .gradient-overlay {
     transition: opacity 0.5s ease; /* Анимация для оверлея */
 }
+
+
+/* Стили для временных слотов */
+.time-slot {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Стиль для доступного слота */
+.time-slot.available {
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Стиль для выбранного слота */
+.time-slot.selected {
+    background-color: black; /* Черный фон */
+    color: white; /* Белый текст */
+}
+
+/* Убираем стандартные стили для активного состояния на мобильных устройствах */
+.time-slot:active {
+    background-color: black; /* Черный фон при нажатии */
+    color: white; /* Белый текст при нажатии */
+}
