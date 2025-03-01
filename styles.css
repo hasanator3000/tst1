@@ -629,6 +629,8 @@ input[type="tel"]:focus {
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s ease, color 0.3s ease;
+    user-select: none; /* Запрещаем выделение текста */
+    -webkit-tap-highlight-color: transparent; /* Убираем подсветку при нажатии на мобильных устройствах */
 }
 
 /* Стиль для доступного слота */
@@ -645,6 +647,6 @@ input[type="tel"]:focus {
 
 /* Убираем стандартные стили для активного состояния на мобильных устройствах */
 .time-slot:active {
-    background-color: black; /* Черный фон при нажатии */
-    color: white; /* Белый текст при нажатии */
+    background-color: inherit; /* Убираем серый фон при нажатии */
+    color: inherit;
 }
