@@ -91,9 +91,41 @@ function prevStep() {
     updateConfirmButton(); // Обновляем состояние кнопки
 }
 
+// Функция для сброса модального окна
+function resetModal() {
+    // Сбрасываем выбор марки и модели
+    document.getElementById('brand').selectedIndex = 0;
+    document.getElementById('model').innerHTML = '<option value="">Выберите модель</option>';
+    document.getElementById('model').disabled = true;
+
+    // Сбрасываем выбор услуг
+    const servicesContainer = document.getElementById('services-container');
+    servicesContainer.innerHTML = '';
+    document.getElementById('total').textContent = '0₽';
+
+    // Сбрасываем выбор времени
+    const timeSlotsContainer = document.querySelector('.time-slots');
+    timeSlotsContainer.innerHTML = '';
+
+    // Сбрасываем поля ввода данных клиента
+    document.getElementById('clientName').value = '';
+    document.getElementById('clientPhone').value = '';
+    document.getElementById('clientCarNumber').value = '';
+
+    // Сбрасываем состояние кнопок
+    document.getElementById('next1').disabled = true;
+    document.getElementById('next2').disabled = true;
+    document.getElementById('next3').disabled = true;
+    document.getElementById('next4').disabled = true;
+
+    // Сбрасываем выбранный шаг
+    showStep(1);
+}
+
 // Закрытие модального окна
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
+    resetModal(); // Сбрасываем состояние модального окна
 }
 
 // ------------ Работа с данными ------------
