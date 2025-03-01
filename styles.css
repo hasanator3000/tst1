@@ -287,7 +287,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 10px;
+    font-size: 9px;
     color: #ffffff;
     background-color: #000000;
     padding: 20px;
@@ -598,4 +598,23 @@ input[type="tel"]:focus {
     color: #000000;
     min-width: 120px;
     text-align: center;
+}
+
+/* Стили для скрытого текста */
+.hidden-text {
+    max-height: 0; /* Начальная высота (скрыто) */
+    opacity: 0; /* Начальная прозрачность */
+    overflow: hidden; /* Скрываем содержимое */
+    transition: max-height 0.5s ease, opacity 0.5s ease; /* Анимация */
+}
+
+/* Стили для открытого текста */
+.hidden-text.open {
+    max-height: 1000px; /* Максимальная высота (можно увеличить, если текст длинный) */
+    opacity: 1; /* Полная видимость */
+}
+
+/* Стили для градиентного оверлея */
+.gradient-overlay {
+    transition: opacity 0.5s ease; /* Анимация для оверлея */
 }
