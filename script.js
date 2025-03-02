@@ -253,7 +253,6 @@ function populateTimeSlots(duration) {
     });
 }
 
-
 // Обновление подытога
 function updateTotal() {
     const selectedServices = document.querySelectorAll('input[name="service"]:checked');
@@ -356,7 +355,6 @@ function setupStep4Listeners() {
     phoneInput.addEventListener('input', validateStep4);
     carNumberInput.addEventListener('input', validateStep4);
 }
-
 
 // Обновление состояния кнопки "Подтвердить"
 function updateConfirmButton() {
@@ -473,6 +471,7 @@ async function getBrandAndModelName(db, modelId) {
         return "Неизвестная модель";
     }
 }
+
 // Добавляем +7 при фокусе на поле ввода телефона
 document.getElementById('clientPhone').addEventListener('focus', function () {
     const phoneInput = this;
