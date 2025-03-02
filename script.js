@@ -566,6 +566,16 @@ async function saveAppointment() {
     try {
         await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
         saveAppointmentToLocalStorage(appointment);
+
+        // Отправляем уведомление в бот
+        await sendAppointmentToBot(
+            clientCarNumber, // Номер автомобиля
+            brandAndModelName.split(" ")[0], // Марка автомобиля
+            brandAndModelName.split(" ")[1], // Модель автомобиля
+            selectedServices.join(", "), // Название услуги
+            `${startTime} - ${endTime}` // Время записи
+        );
+
         console.log("Запись успешно сохранена");
         showStep(5);
     } catch (error) {
@@ -608,73 +618,3 @@ document.getElementById('copy-phone-number').addEventListener('click', function 
         console.error('Ошибка при копировании: ', error);
     });
 });
-
-// Функция для отправки данных в бот
-async function sendAppointmentToBot(carNumber, carBrand, carModel, serviceName, appointmentTime) {
-    const user = window.Telegram.WebApp.initDataUnsafe.user; // Получаем данные пользователя
-    const userId = user.id; // ID пользователя в Telegram
-
-    // Отправляем данные в бот
-    await fetch(`https://api.telegram.org/bot${YOUR_BOT_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            chat_id: userId,
-            text: `Запись успешно создана!\n\nАвтомобиль: ${carNumber} ${carBrand} ${carModel}\nУслуга: ${serviceName}\nВремя: ${appointmentTime}`,
-            parse_mode: "HTML",
-        }),
-    });
-}
-
-// Модифицируем функцию saveAppointment
-async function saveAppointment() {
-    if (!db) {
-        console.error("База данных не инициализирована");
-        return;
-    }
-
-    const clientName = document.getElementById('clientName').value;
-    const clientPhone = document.getElementById('clientPhone').value;
-    const clientCarNumber = document.getElementById('clientCarNumber').value;
-
-    const selectedServices = Array.from(document.querySelectorAll('input[name="service"]:checked'))
-        .map(service => service.value);
-
-    const selectedTimeSlot = document.querySelector('.time-slot.selected');
-
-    if (!selectedTimeSlot) {
-        console.error("Время не выбрано");
-        return;
-    }
-
-    const [startTime, endTime] = selectedTimeSlot.textContent.split(' - ');
-
-    const modelId = document.getElementById('model').value;
-    const brandAndModelName = await getBrandAndModelName(db, modelId);
-
-    const appointment = {
-        clientName,
-        clientPhone,
-        carNumber: clientCarNumber,
-        model: brandAndModelName,
-        services: selectedServices,
-        startTime,
-        endTime,
-        timestamp: new Date().toLocaleString()
-    };
-
-    try {
-        await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
-        saveAppointmentToLocalStorage(appointment);
-
-        // Отправляем уведомление в бот
-        await sendAppointmentToBot(clientCarNumber, brandAndModelName.split(" ")[0], brandAndModelName.split(" ")[1], selectedServices.join(", "), `${startTime} - ${endTime}`);
-
-        console.log("Запись успешно сохранена");
-        showStep(5);
-    } catch (error) {
-        console.error("Ошибка при сохранении записи:", error);
-    }
-}
