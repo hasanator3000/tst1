@@ -1,4 +1,5 @@
 // ------------ Глобальные переменные ------------
+
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
 
@@ -96,6 +97,7 @@ function resetModal() {
 
     const servicesContainer = document.getElementById('services-container');
     servicesContainer.innerHTML = '';
+
     document.getElementById('total').textContent = '0₽';
 
     const timeSlotsContainer = document.querySelector('.time-slots');
@@ -223,11 +225,18 @@ function populateTimeSlots(duration) {
         slotDiv.addEventListener('click', function () {
             const isSelected = this.classList.contains('selected');
 
-            if (isSelected) {
-                this.classList.remove('selected');
-            } else {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            // Убираем выделение у всех слотов
+            document.querySelectorAll('.time-slot').forEach(s => {
+                s.classList.remove('selected');
+                s.style.backgroundColor = ''; // Сбрасываем фон
+                s.style.color = ''; // Сбрасываем цвет текста
+            });
+
+            // Если слот не был выбран, выделяем его
+            if (!isSelected) {
                 this.classList.add('selected');
+                this.style.backgroundColor = 'black'; // Явно задаем черный фон
+                this.style.color = 'white'; // Явно задаем белый текст
             }
 
             updateConfirmButton();
@@ -281,11 +290,9 @@ function validateName(input) {
 // Форматирование номера телефона
 function formatPhone(input) {
     let phone = input.value.replace(/\D/g, '');
-
     if (phone.startsWith('7') || phone.startsWith('8')) {
         phone = phone.substring(1);
     }
-
     if (phone.length > 10) {
         phone = phone.substring(0, 10);
     }
@@ -318,7 +325,6 @@ function validateStep4() {
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
     const carNumber = carNumberInput.value.trim();
-
     const isPhoneValid = phone.length === 18;
 
     nextButton.disabled = !(name && isPhoneValid && carNumber);
@@ -349,21 +355,17 @@ function updateConfirmButton() {
             const modelSelected = document.getElementById('model').value;
             confirmButton.disabled = !(brandSelected && modelSelected);
             break;
-
         case 2:
             const servicesSelected = document.querySelectorAll('input[name="service"]:checked').length > 0;
             confirmButton.disabled = !servicesSelected;
             break;
-
         case 3:
             const timeSlotSelected = document.querySelector('.time-slot.selected');
             confirmButton.disabled = !timeSlotSelected;
             break;
-
         case 4:
             validateStep4();
             break;
-
         default:
             confirmButton.disabled = false;
     }
@@ -421,6 +423,7 @@ document.getElementById('model').addEventListener('change', async function () {
         if (!modelId) {
             return;
         }
+
         const services = await dbFunctions.getServices(db, modelId);
         populateServices(services);
     } catch (error) {
@@ -440,6 +443,7 @@ async function getBrandAndModelName(db, modelId) {
         stmt.bind({ $modelId: modelId });
         const result = stmt.step() ? stmt.getAsObject() : null;
         stmt.free();
+
         return result ? `${result.brandName} ${result.modelName}` : "Неизвестная модель";
     } catch (error) {
         console.error("Ошибка при получении марки и модели:", error);
@@ -508,14 +512,21 @@ document.querySelectorAll('.time-slot').forEach(function (slot) {
         if (!slot.classList.contains('unavailable')) {
             document.querySelectorAll('.time-slot').forEach(function (s) {
                 s.classList.remove('selected');
+                s.style.backgroundColor = '';
+                s.style.color = '';
             });
+
             slot.classList.add('selected');
+            slot.style.backgroundColor = 'black';
+            slot.style.color = 'white';
+
             updateConfirmButton();
         }
     });
 });
 
 // ------------ Функция для сохранения записи ------------
+
 async function saveAppointment() {
     if (!db) {
         console.error("База данных не инициализирована");
@@ -530,14 +541,15 @@ async function saveAppointment() {
         .map(service => service.value);
 
     const selectedTimeSlot = document.querySelector('.time-slot.selected');
+
     if (!selectedTimeSlot) {
         console.error("Время не выбрано");
         return;
     }
+
     const [startTime, endTime] = selectedTimeSlot.textContent.split(' - ');
 
     const modelId = document.getElementById('model').value;
-
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
     const appointment = {
