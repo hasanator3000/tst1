@@ -650,3 +650,31 @@ function addDownloadButton() {
 
 // Вызов функции для добавления кнопки
 addDownloadButton();
+
+// Открытие модального окна при нажатии на номер телефона
+document.querySelector('.number').addEventListener('click', function () {
+    document.getElementById('phone-modal').style.display = 'flex';
+});
+
+// Закрытие модального окна при нажатии на крестик
+document.querySelector('.close-phone-modal').addEventListener('click', function () {
+    document.getElementById('phone-modal').style.display = 'none';
+});
+
+// Закрытие модального окна при клике вне его области
+window.addEventListener('click', function (event) {
+    const phoneModal = document.getElementById('phone-modal');
+    if (event.target === phoneModal) {
+        phoneModal.style.display = 'none';
+    }
+});
+
+// Копирование номера телефона
+document.getElementById('copy-phone-number').addEventListener('click', function () {
+    const phoneNumber = '+7 (495) 228-64-28';
+    navigator.clipboard.writeText(phoneNumber).then(function () {
+        alert('Номер скопирован: ' + phoneNumber);
+    }).catch(function (error) {
+        console.error('Ошибка при копировании: ', error);
+    });
+});
