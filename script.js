@@ -12,17 +12,15 @@ function toggleReadMore() {
     const gradientOverlay = document.getElementById('gradient-overlay');
 
     if (hiddenText.classList.contains('open')) {
-        // Закрываем текст
         hiddenText.classList.remove('open');
-        gradientOverlay.style.opacity = '1'; // Показываем градиент
-        readFullButton.style.display = 'block'; // Показываем кнопку "Читать полностью"
-        hideButton.style.display = 'none'; // Скрываем кнопку "Скрыть"
+        gradientOverlay.style.opacity = '1';
+        readFullButton.style.display = 'block';
+        hideButton.style.display = 'none';
     } else {
-        // Открываем текст
         hiddenText.classList.add('open');
-        gradientOverlay.style.opacity = '0'; // Скрываем градиент
-        readFullButton.style.display = 'none'; // Скрываем кнопку "Читать полностью"
-        hideButton.style.display = 'block'; // Показываем кнопку "Скрыть"
+        gradientOverlay.style.opacity = '0';
+        readFullButton.style.display = 'none';
+        hideButton.style.display = 'block';
     }
 }
 
@@ -41,7 +39,6 @@ function showStep(step) {
     });
     document.getElementById(`step${step}`).style.display = 'flex';
 
-    // Управление видимостью кнопки "Назад" и крестика
     const backButton = document.querySelector('.back-button');
     const closeButton = document.querySelector('.close-modal');
 
@@ -56,10 +53,8 @@ function showStep(step) {
         closeButton.style.display = 'block';
     }
 
-    // Обновляем состояние кнопки "Подтвердить"
     updateConfirmButton();
 
-    // Дополнительные действия для шага 4
     if (step === 4) {
         validateStep4();
         setupStep4Listeners();
@@ -75,9 +70,9 @@ function nextStep() {
     const nextStepNumber = currentStepNumber + 1;
 
     if (nextStepNumber === 5) {
-        saveAppointment(); // Если это последний шаг, сохраняем запись
+        saveAppointment();
     } else {
-        showStep(nextStepNumber); // Переходим на следующий шаг
+        showStep(nextStepNumber);
     }
 }
 
@@ -90,44 +85,38 @@ function prevStep() {
             showStep(currentStepNumber - 1);
         }
     }
-    updateConfirmButton(); // Обновляем состояние кнопки
+    updateConfirmButton();
 }
 
 // Функция для сброса модального окна
 function resetModal() {
-    // Сбрасываем выбор марки и модели
     document.getElementById('brand').selectedIndex = 0;
     document.getElementById('model').innerHTML = '<option value="">Выберите модель</option>';
     document.getElementById('model').disabled = true;
 
-    // Сбрасываем выбор услуг
     const servicesContainer = document.getElementById('services-container');
     servicesContainer.innerHTML = '';
     document.getElementById('total').textContent = '0₽';
 
-    // Сбрасываем выбор времени
     const timeSlotsContainer = document.querySelector('.time-slots');
     timeSlotsContainer.innerHTML = '';
 
-    // Сбрасываем поля ввода данных клиента
     document.getElementById('clientName').value = '';
     document.getElementById('clientPhone').value = '';
     document.getElementById('clientCarNumber').value = '';
 
-    // Сбрасываем состояние кнопок
     document.getElementById('next1').disabled = true;
     document.getElementById('next2').disabled = true;
     document.getElementById('next3').disabled = true;
     document.getElementById('next4').disabled = true;
 
-    // Сбрасываем выбранный шаг
     showStep(1);
 }
 
 // Закрытие модального окна
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
-    resetModal(); // Сбрасываем состояние модального окна
+    resetModal();
 }
 
 // ------------ Работа с данными ------------
@@ -231,21 +220,16 @@ function populateTimeSlots(duration) {
         slotDiv.className = 'time-slot available';
         slotDiv.textContent = `${slot.start} - ${slot.end}`;
 
-        // Обработчик клика для выбора/отмены выбора слота
         slotDiv.addEventListener('click', function () {
             const isSelected = this.classList.contains('selected');
 
-            // Если слот уже выбран, снимаем выделение
             if (isSelected) {
                 this.classList.remove('selected');
             } else {
-                // Снимаем выделение со всех слотов
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-                // Выделяем текущий слот
                 this.classList.add('selected');
             }
 
-            // Обновляем состояние кнопки "Подтвердить"
             updateConfirmButton();
         });
 
@@ -259,25 +243,20 @@ function updateTotal() {
     let total = 0;
     let totalDuration = 0;
 
-    // Считаем общую стоимость и длительность выбранных услуг
     selectedServices.forEach(service => {
         total += parseInt(service.dataset.price);
         totalDuration += parseInt(service.dataset.duration);
     });
 
-    // Обновляем подытог
     document.getElementById('total').textContent = `${total}₽`;
 
-    // Если выбрана хотя бы одна услуга, обновляем временные слоты
     if (selectedServices.length > 0) {
         populateTimeSlots(totalDuration);
     } else {
-        // Если ни одна услуга не выбрана, очищаем временные слоты
         const timeSlotsContainer = document.querySelector('.time-slots');
         timeSlotsContainer.innerHTML = '';
     }
 
-    // Обновляем состояние кнопки "Подтвердить"
     updateConfirmButton();
 }
 
@@ -366,27 +345,23 @@ function updateConfirmButton() {
 
     switch (stepNumber) {
         case 1:
-            // Шаг 1: Выбор марки и модели
             const brandSelected = document.getElementById('brand').value;
             const modelSelected = document.getElementById('model').value;
             confirmButton.disabled = !(brandSelected && modelSelected);
             break;
 
         case 2:
-            // Шаг 2: Выбор услуг
             const servicesSelected = document.querySelectorAll('input[name="service"]:checked').length > 0;
             confirmButton.disabled = !servicesSelected;
             break;
 
         case 3:
-            // Шаг 3: Выбор времени
             const timeSlotSelected = document.querySelector('.time-slot.selected');
             confirmButton.disabled = !timeSlotSelected;
             break;
 
         case 4:
-            // Шаг 4: Ввод данных клиента
-            validateStep4(); // Используем уже существующую функцию валидации
+            validateStep4();
             break;
 
         default:
@@ -436,7 +411,7 @@ document.getElementById('model').addEventListener('change', function () {
     } else {
         document.getElementById('next1').disabled = true;
     }
-    updateConfirmButton(); // Обновляем состояние кнопки
+    updateConfirmButton();
 });
 
 // Получение услуг при выборе модели
@@ -535,7 +510,7 @@ document.querySelectorAll('.time-slot').forEach(function (slot) {
                 s.classList.remove('selected');
             });
             slot.classList.add('selected');
-            updateConfirmButton(); // Обновляем состояние кнопки
+            updateConfirmButton();
         }
     });
 });
@@ -547,16 +522,13 @@ async function saveAppointment() {
         return;
     }
 
-    // Собираем данные из формы
     const clientName = document.getElementById('clientName').value;
     const clientPhone = document.getElementById('clientPhone').value;
     const clientCarNumber = document.getElementById('clientCarNumber').value;
 
-    // Получаем выбранные услуги
     const selectedServices = Array.from(document.querySelectorAll('input[name="service"]:checked'))
         .map(service => service.value);
 
-    // Получаем выбранное время
     const selectedTimeSlot = document.querySelector('.time-slot.selected');
     if (!selectedTimeSlot) {
         console.error("Время не выбрано");
@@ -564,33 +536,26 @@ async function saveAppointment() {
     }
     const [startTime, endTime] = selectedTimeSlot.textContent.split(' - ');
 
-    // Получаем выбранную модель
     const modelId = document.getElementById('model').value;
 
-    // Получаем марку и модель
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
-    // Создаем объект записи
     const appointment = {
         clientName,
         clientPhone,
         carNumber: clientCarNumber,
-        model: brandAndModelName, // Используем название марки и модели
-        services: selectedServices, // Используем ID услуг
+        model: brandAndModelName,
+        services: selectedServices,
         startTime,
         endTime,
-        timestamp: new Date().toLocaleString() // Добавляем время создания записи
+        timestamp: new Date().toLocaleString()
     };
 
     try {
-        // Сохраняем запись в базу данных
         await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
-        
-        // Сохраняем запись в LocalStorage
         saveAppointmentToLocalStorage(appointment);
-        
         console.log("Запись успешно сохранена");
-        showStep(5); // Переходим на шаг 5 (успешная запись)
+        showStep(5);
     } catch (error) {
         console.error("Ошибка при сохранении записи:", error);
     }
@@ -603,53 +568,6 @@ function saveAppointmentToLocalStorage(appointment) {
     localStorage.setItem('appointments', JSON.stringify(appointments));
     console.log('Запись сохранена в LocalStorage:', appointment);
 }
-
-// Функция для получения всех записей из LocalStorage
-function getAppointmentsFromLocalStorage() {
-    const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-    console.log('Записи из LocalStorage:', appointments);
-    return appointments;
-}
-
-// Функция для скачивания данных в виде текстового файла
-function downloadAppointmentsAsFile() {
-    const appointments = getAppointmentsFromLocalStorage();
-
-    // Преобразуем записи в текстовый формат
-    const data = appointments.map(appointment => 
-        `Имя: ${appointment.clientName}\n` +
-        `Телефон: ${appointment.clientPhone}\n` +
-        `Номер авто: ${appointment.carNumber}\n` +
-        `Модель: ${appointment.model}\n` +
-        `Услуги: ${appointment.services.join(', ')}\n` +
-        `Время: ${appointment.startTime} - ${appointment.endTime}\n` +
-        `Дата записи: ${appointment.timestamp}\n` +
-        '---------------------------'
-    ).join('\n');
-
-    // Создаем Blob (бинарный объект) с данными
-    const blob = new Blob([data], { type: 'text/plain' });
-
-    // Создаем ссылку для скачивания
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'appointments.txt'; // Имя файла
-    link.click();
-
-    // Освобождаем память
-    URL.revokeObjectURL(link.href);
-}
-
-// Добавляем кнопку для скачивания файла
-function addDownloadButton() {
-    const downloadButton = document.createElement('button');
-    downloadButton.textContent = 'Скачать записи';
-    downloadButton.addEventListener('click', downloadAppointmentsAsFile);
-    document.body.appendChild(downloadButton);
-}
-
-// Вызов функции для добавления кнопки
-addDownloadButton();
 
 // Открытие модального окна при нажатии на номер телефона
 document.querySelector('.number').addEventListener('click', function () {
