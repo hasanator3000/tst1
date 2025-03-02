@@ -651,3 +651,13 @@ input[type="tel"]:focus {
     background-color: inherit; /* Убираем серый фон при нажатии */
     color: inherit;
 }
+
+.number a {
+    color: inherit; /* Наследует цвет текста от родителя */
+    text-decoration: none; /* Убирает подчёркивание */
+    cursor: pointer; /* Курсор в виде указателя */
+}
+
+.number a:hover {
+    text-decoration: underline; /* Подчёркивание при наведении (опционально) */
+}
