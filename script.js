@@ -325,14 +325,9 @@ function validateStep4() {
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
     const carNumber = carNumberInput.value.trim();
+    const isPhoneValid = phone.length === 18;
 
-    // Проверяем, что все поля заполнены
-    const isNameValid = name.length > 0;
-    const isPhoneValid = phone.length === 18; // Проверяем длину отформатированного номера
-    const isCarNumberValid = carNumber.length > 0;
-
-    // Активируем кнопку, если все данные корректны
-    nextButton.disabled = !(isNameValid && isPhoneValid && isCarNumberValid);
+    nextButton.disabled = !(name && isPhoneValid && carNumber);
 }
 
 // Добавляем обработчики событий для полей ввода на шаге 4
@@ -571,16 +566,6 @@ async function saveAppointment() {
     try {
         await dbFunctions.saveAppointment(db, clientName, clientPhone, clientCarNumber, modelId, selectedServices, startTime, endTime);
         saveAppointmentToLocalStorage(appointment);
-
-        // Отправляем уведомление в бот
-        await sendAppointmentToBot(
-            clientCarNumber, // Номер автомобиля
-            brandAndModelName.split(" ")[0], // Марка автомобиля
-            brandAndModelName.split(" ")[1], // Модель автомобиля
-            selectedServices.join(", "), // Название услуги
-            `${startTime} - ${endTime}` // Время записи
-        );
-
         console.log("Запись успешно сохранена");
         showStep(5);
     } catch (error) {
