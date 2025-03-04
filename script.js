@@ -479,21 +479,19 @@ document.addEventListener('scroll', function () {
 // Функция для изменения дня
 function changeDay(offset) {
     currentDayOffset += offset;
+    selectedDate = new Date();
+    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
     updateDayDisplay();
+    updateTimeSlots(); // Обновляем временные слоты при изменении даты
 }
 
-// Функция для обновления отображения текущей даты
 function updateDayDisplay() {
     const currentDayElement = document.getElementById('current-day');
-    const today = new Date();
-    today.setDate(today.getDate() + currentDayOffset);
-
-    const formattedDate = today.toLocaleDateString('ru-RU', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
     });
-
     currentDayElement.textContent = formattedDate;
 }
 
