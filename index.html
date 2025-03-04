@@ -254,14 +254,16 @@
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
-                      <!-- Шаг 3: Выбор даты и времени -->
+<!-- Шаг 3: Выбор даты и времени -->
 <div id="step3" class="step" style="display: none;">
     <h2>Выберите дату и время</h2>
     <div class="day-selector">
         <div class="day-button" onclick="changeDay(-1)">
             <div class="triangle-left"></div>
         </div>
-        <input type="text" id="date-picker" class="date-picker" placeholder="Выберите дату" readonly>
+        <div id="date-display" class="date-display" onclick="openCalendar()">
+            3 марта 2025 <!-- Текст даты -->
+        </div>
         <div class="day-button" onclick="changeDay(1)">
             <div class="triangle-right"></div>
         </div>
