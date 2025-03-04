@@ -4,21 +4,41 @@ let currentDayOffset = 0; // Смещение для выбора даты
 let selectedDate = new Date(); // Текущая выбранная дата
 let flatpickrInstance; // Экземпляр календаря
 
-// Функция для обновления отображения даты
-function updateDayDisplay() {
-    const dateDisplayElement = document.getElementById('date-display');
-    if (!dateDisplayElement) {
-        console.error("Элемент #date-display не найден!");
-        return;
+document.addEventListener('DOMContentLoaded', function () {
+    // Инициализация кнопки "Записаться сейчас"
+    const fixedButton = document.getElementById('fixed-button');
+    if (fixedButton) {
+        fixedButton.addEventListener('click', function () {
+            currentDayOffset = 0;
+            selectedDate = new Date();
+            updateDayDisplay();
+            document.getElementById('modal').style.display = 'flex';
+            showStep(1);
+        });
+    } else {
+        console.error("Элемент #fixed-button не найден!");
     }
 
-    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    });
-    dateDisplayElement.textContent = formattedDate;
-}
+    // Функция для обновления отображения даты
+    function updateDayDisplay() {
+        const dateDisplayElement = document.getElementById('date-display');
+        if (!dateDisplayElement) {
+            console.error("Элемент #date-display не найден!");
+            return;
+        }
+
+        const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
+        dateDisplayElement.textContent = formattedDate;
+    }
+
+   
+});
+
+
 
 // Функция для изменения дня с помощью стрелок
 function changeDay(offset) {
