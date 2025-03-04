@@ -1,7 +1,8 @@
 // ------------ Глобальные переменные ------------
-
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
+let selectedDate = new Date(); // Текущая выбранная дата
+let flatpickrInstance; // Экземпляр календаря
 
 // ------------ Общие функции интерфейса ------------
 
@@ -29,8 +30,28 @@ function toggleReadMore() {
 
 // Открытие модального окна
 document.getElementById('fixed-button').addEventListener('click', function () {
+    currentDayOffset = 0;
+    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
+    updateDayDisplay();
+    updateTimeSlots(); // Обновляем временные слоты
     document.getElementById('modal').style.display = 'flex';
     showStep(1);
+
+    // Инициализация календаря
+    if (flatpickrInstance) {
+        flatpickrInstance.destroy();
+    }
+
+    flatpickrInstance = flatpickr("#date-picker", {
+        locale: "ru",
+        dateFormat: "d.m.Y",
+        defaultDate: selectedDate,
+        onChange: function (selectedDates) {
+            selectedDate = selectedDates[0];
+            updateDayDisplay();
+            updateTimeSlots();
+        },
+    });
 });
 
 // Показ текущего шага и скрытие остальных
@@ -62,6 +83,7 @@ function showStep(step) {
     }
 }
 
+// Переход к следующему шагу
 function nextStep() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
@@ -96,7 +118,6 @@ function resetModal() {
 
     const servicesContainer = document.getElementById('services-container');
     servicesContainer.innerHTML = '';
-
     document.getElementById('total').textContent = '0₽';
 
     const timeSlotsContainer = document.querySelector('.time-slots');
@@ -195,14 +216,14 @@ function populateServices(services) {
 // Расчет временных слотов
 function calculateTimeSlots(duration) {
     const slots = [];
-    let startTime = new Date();
-    startTime.setHours(9, 0, 0);
+    let startTime = new Date(selectedDate);
+    startTime.setHours(9, 0, 0); // Начало рабочего дня
 
     while (startTime.getHours() < 20) {
         const endTime = new Date(startTime.getTime() + duration * 60000);
         slots.push({
             start: startTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
-            end: endTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+            end: endTime.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
         });
         startTime = endTime;
     }
@@ -210,6 +231,7 @@ function calculateTimeSlots(duration) {
     return slots;
 }
 
+// Отображение временных слотов
 function populateTimeSlots(duration) {
     const slots = calculateTimeSlots(duration);
     const timeSlotsContainer = document.querySelector('.time-slots');
@@ -225,9 +247,17 @@ function populateTimeSlots(duration) {
 
             if (isSelected) {
                 this.classList.remove('selected');
+                this.style.backgroundColor = '';
+                this.style.color = '';
             } else {
-                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                document.querySelectorAll('.time-slot').forEach(s => {
+                    s.classList.remove('selected');
+                    s.style.backgroundColor = '';
+                    s.style.color = '';
+                });
                 this.classList.add('selected');
+                this.style.backgroundColor = 'black';
+                this.style.color = 'white';
             }
 
             updateConfirmButton();
@@ -485,37 +515,18 @@ function changeDay(offset) {
     updateTimeSlots(); // Обновляем временные слоты при изменении даты
 }
 
+// Обновление отображения текущей даты
 function updateDayDisplay() {
     const currentDayElement = document.getElementById('current-day');
     const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
         weekday: 'long',
         day: 'numeric',
-        month: 'long'
+        month: 'long',
     });
     currentDayElement.textContent = formattedDate;
 }
 
-// Инициализация выбора времени
-document.querySelectorAll('.time-slot').forEach(function (slot) {
-    slot.addEventListener('click', function () {
-        if (!slot.classList.contains('unavailable')) {
-            document.querySelectorAll('.time-slot').forEach(function (s) {
-                s.classList.remove('selected');
-                s.style.backgroundColor = '';
-                s.style.color = '';
-            });
-
-            slot.classList.add('selected');
-            slot.style.backgroundColor = 'black';
-            slot.style.color = 'white';
-
-            updateConfirmButton();
-        }
-    });
-});
-
 // ------------ Функция для сохранения записи ------------
-
 async function saveAppointment() {
     if (!db) {
         console.error("База данных не инициализирована");
@@ -540,13 +551,11 @@ async function saveAppointment() {
 
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
-    // Получаем выбранную дату
-    const selectedDate = new Date();
-    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
+    // Форматируем выбранную дату
     const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
         day: 'numeric',
         month: 'long',
-        year: 'numeric'
+        year: 'numeric',
     });
 
     const appointment = {
@@ -558,7 +567,7 @@ async function saveAppointment() {
         date: formattedDate,
         startTime,
         endTime,
-        timestamp: new Date().toLocaleString()
+        timestamp: new Date().toLocaleString(),
     };
 
     try {
@@ -570,6 +579,7 @@ async function saveAppointment() {
         console.error("Ошибка при сохранении записи:", error);
     }
 }
+
 // Функция для сохранения записи в LocalStorage
 function saveAppointmentToLocalStorage(appointment) {
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
