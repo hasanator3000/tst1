@@ -311,3 +311,184 @@ input[type="tel"]:focus {
     border-color: #000000;
     background-color: #ffffff;
 }
+
+/* Стили для шапки */
+.header {
+    background-color: #eeeeee;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px 10px 0 0;
+    margin: 0;
+    height: 20px;
+}
+
+.name, .number {
+    font-size: 10px;
+    font-weight: 700;
+    color: #131414;
+}
+
+.number a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.number a:hover {
+    text-decoration: underline;
+}
+
+/* Логотип */
+.logo {
+    text-align: left;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 0 3.5%;
+}
+
+.logo-image {
+    max-width: 75%;
+    height: auto;
+}
+
+/* Сетка услуг */
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.usluga {
+    background-color: rgba(238, 238, 238, 0.93);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.usluga:hover {
+    background-color: #d9d9d9;
+    transform: scale(1.05);
+}
+
+.usluga-image {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* О компании */
+.about {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #56595a;
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+}
+
+.hidden-text {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #56595a;
+    margin-top: 0;
+    padding: 0 3.5%;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.hidden-text.open {
+    max-height: 1000px;
+    opacity: 1;
+}
+
+/* Примеры работ */
+.primeri {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0 3.5%;
+}
+
+.primer1, .primer2, .primer3 {
+    background-color: rgba(238, 238, 238, 0.93);
+    border-radius: 10px;
+    padding: 0;
+    text-align: center;
+}
+
+.primer-image {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+}
+
+.rectangle1, .rectangle12, .rectangle13 {
+    background-color: #d9d9d9;
+    height: 35px;
+    border-radius: 0 0 9px 9px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-top: -4px;
+}
+
+/* Футер */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9px;
+    color: #ffffff;
+    background-color: #000000;
+    padding: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.footer-left {
+    text-align: left;
+}
+
+.footer-right {
+    text-align: right;
+}
+
+.footer-right a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.footer-right a:hover {
+    text-decoration: underline;
+}
+
+/* Дополнительные стили */
+.spacer {
+    height: 20px;
+}
