@@ -2,9 +2,11 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Koch24 Детейлинг центр</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Подключение flatpickr -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <div id='app' class='app'>
@@ -219,8 +221,8 @@
             </div>
         </div>
     </div>
-    
-     <!-- Кнопка "Записаться сейчас" -->
+
+    <!-- Кнопка "Записаться сейчас" -->
     <div id="fixed-button" class="fixed-button">
         Записаться сейчас
     </div>
@@ -254,23 +256,21 @@
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
-<!-- Шаг 3: Выбор даты и времени -->
-<div id="step3" class="step" style="display: none;">
-    <h2>Выберите дату и время</h2>
-    <div class="day-selector">
-        <div class="day-button" onclick="changeDay(-1)">
-            <div class="triangle-left"></div>
-        </div>
-        <div id="date-display" class="date-display" onclick="openCalendar()">
-            3 марта 2025 <!-- Текст даты -->
-        </div>
-        <div class="day-button" onclick="changeDay(1)">
-            <div class="triangle-right"></div>
-        </div>
-    </div>
-    <div class="time-slots"></div>
-    <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
-</div>
+            <!-- Шаг 3: Выбор даты и времени -->
+            <div id="step3" class="step" style="display: none;">
+                <h2>Выберите дату и время</h2>
+                <div class="day-selector">
+                    <div class="day-button" onclick="changeDay(-1)">
+                        <div class="triangle-left"></div>
+                    </div>
+                    <div id="date-display" class="date-display" onclick="openCalendar()"></div>
+                    <div class="day-button" onclick="changeDay(1)">
+                        <div class="triangle-right"></div>
+                    </div>
+                </div>
+                <div class="time-slots"></div>
+                <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
+            </div>
 
             <!-- Шаг 4: Ввод данных -->
             <div id="step4" class="step" style="display: none;">
@@ -293,11 +293,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
     <script src="database.js"></script>
     <script src="script.js"></script>
-
-<!-- Подключение flatpickr -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script> <!-- Локализация на русский -->
-    
 </body>
 </html>
