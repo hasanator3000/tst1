@@ -4,6 +4,64 @@ let currentDayOffset = 0; // Смещение для выбора даты
 let selectedDate = new Date(); // Текущая выбранная дата
 let flatpickrInstance; // Экземпляр календаря
 
+// Инициализация календаря
+function initFlatpickr() {
+    flatpickrInstance = flatpickr("#date-picker", {
+        locale: "ru", // Локализация на русский
+        dateFormat: "d.m.Y", // Формат даты
+        defaultDate: selectedDate, // Текущая выбранная дата
+        onChange: function (selectedDates) {
+            selectedDate = selectedDates[0]; // Обновляем выбранную дату
+            updateDayDisplay(); // Обновляем отображение даты
+            updateTimeSlots(); // Обновляем временные слоты
+        },
+    });
+}
+
+// Функция для изменения дня с помощью стрелок
+function changeDay(offset) {
+    currentDayOffset += offset;
+    selectedDate = new Date();
+    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
+    updateDayDisplay();
+    updateTimeSlots();
+
+    // Обновляем дату в календаре
+    if (flatpickrInstance) {
+        flatpickrInstance.setDate(selectedDate);
+    }
+}
+
+// Обновление отображения текущей даты
+function updateDayDisplay() {
+    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+    document.getElementById('date-picker').value = formattedDate;
+}
+
+// Инициализация календаря при открытии модального окна
+document.getElementById('fixed-button').addEventListener('click', function () {
+    currentDayOffset = 0;
+    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
+    updateDayDisplay();
+    updateTimeSlots();
+
+    // Инициализация календаря
+    if (flatpickrInstance) {
+        flatpickrInstance.destroy();
+    }
+    initFlatpickr();
+
+    // Открываем модальное окно
+    document.getElementById('modal').style.display = 'flex';
+    showStep(1);
+});
+
+
+
 // ------------ Общие функции интерфейса ------------
 
 // Функция для кнопки "Читать полностью" и "Скрыть"
