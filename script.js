@@ -28,6 +28,14 @@ function toggleReadMore() {
 
 // ------------ Функции для модального окна ------------
 
+// ------------ Функции для модального окна ------------
+
+// Открытие модального окна
+document.getElementById('fixed-button').addEventListener('click', function () {
+    document.getElementById('modal').style.display = 'flex';
+    showStep(1);
+});
+
 // Показ текущего шага и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
