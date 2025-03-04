@@ -62,7 +62,6 @@ function showStep(step) {
     }
 }
 
-// Переход к следующему шагу
 function nextStep() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
@@ -211,7 +210,6 @@ function calculateTimeSlots(duration) {
     return slots;
 }
 
-// Отображение временных слотов
 function populateTimeSlots(duration) {
     const slots = calculateTimeSlots(duration);
     const timeSlotsContainer = document.querySelector('.time-slots');
@@ -225,18 +223,11 @@ function populateTimeSlots(duration) {
         slotDiv.addEventListener('click', function () {
             const isSelected = this.classList.contains('selected');
 
-            // Убираем выделение у всех слотов
-            document.querySelectorAll('.time-slot').forEach(s => {
-                s.classList.remove('selected');
-                s.style.backgroundColor = ''; // Сбрасываем фон
-                s.style.color = ''; // Сбрасываем цвет текста
-            });
-
-            // Если слот не был выбран, выделяем его
-            if (!isSelected) {
+            if (isSelected) {
+                this.classList.remove('selected');
+            } else {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
                 this.classList.add('selected');
-                this.style.backgroundColor = 'black'; // Явно задаем черный фон
-                this.style.color = 'white'; // Явно задаем белый текст
             }
 
             updateConfirmButton();
@@ -541,16 +532,24 @@ async function saveAppointment() {
         .map(service => service.value);
 
     const selectedTimeSlot = document.querySelector('.time-slot.selected');
-
     if (!selectedTimeSlot) {
         console.error("Время не выбрано");
         return;
     }
-
     const [startTime, endTime] = selectedTimeSlot.textContent.split(' - ');
 
     const modelId = document.getElementById('model').value;
+
     const brandAndModelName = await getBrandAndModelName(db, modelId);
+
+    // Получаем выбранную дату
+    const selectedDate = new Date();
+    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
+    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
 
     const appointment = {
         clientName,
@@ -558,6 +557,7 @@ async function saveAppointment() {
         carNumber: clientCarNumber,
         model: brandAndModelName,
         services: selectedServices,
+        date: formattedDate,
         startTime,
         endTime,
         timestamp: new Date().toLocaleString()
@@ -572,7 +572,6 @@ async function saveAppointment() {
         console.error("Ошибка при сохранении записи:", error);
     }
 }
-
 // Функция для сохранения записи в LocalStorage
 function saveAppointmentToLocalStorage(appointment) {
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
