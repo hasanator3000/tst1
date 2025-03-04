@@ -91,11 +91,21 @@ function toggleReadMore() {
 
 // Показ текущего шага и скрытие остальных
 function showStep(step) {
+    // Скрываем все шаги
     document.querySelectorAll('.step').forEach(function (stepElement) {
         stepElement.style.display = 'none';
     });
-    document.getElementById(`step${step}`).style.display = 'flex';
 
+    // Показываем текущий шаг
+    const currentStepElement = document.getElementById(`step${step}`);
+    if (currentStepElement) {
+        currentStepElement.style.display = 'flex';
+    } else {
+        console.error(`Шаг ${step} не найден!`);
+        return;
+    }
+
+    // Управление видимостью кнопок "Назад" и "Закрыть"
     const backButton = document.querySelector('.back-button');
     const closeButton = document.querySelector('.close-modal');
 
@@ -110,11 +120,24 @@ function showStep(step) {
         closeButton.style.display = 'block';
     }
 
+    // Обновляем состояние кнопки "Подтвердить"
     updateConfirmButton();
 
-    if (step === 4) {
-        validateStep4();
-        setupStep4Listeners();
+    // Дополнительные действия для конкретных шагов
+    switch (step) {
+        case 3:
+            // Обновляем отображение даты и временных слотов
+            updateDayDisplay();
+            updateTimeSlots();
+            break;
+        case 4:
+            // Валидация и настройка слушателей для шага 4
+            validateStep4();
+            setupStep4Listeners();
+            break;
+        default:
+            // Ничего не делаем для других шагов
+            break;
     }
 }
 
