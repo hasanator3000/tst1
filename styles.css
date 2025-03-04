@@ -604,3 +604,27 @@ input[type="tel"]:focus {
     min-width: 120px;
     text-align: center;
 }
+
+.date-picker {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 2px solid #000000;
+    border-radius: 10px;
+    background-color: #eeeeee;
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    text-align: center;
+    cursor: pointer;
+}
+
+.date-picker:hover {
+    border-color: #56595a;
+}
+
+.date-picker:focus {
+    outline: none;
+    border-color: #000000;
+    background-color: #ffffff;
+}
