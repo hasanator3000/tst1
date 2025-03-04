@@ -28,32 +28,6 @@ function toggleReadMore() {
 
 // ------------ Функции для модального окна ------------
 
-// Открытие модального окна
-document.getElementById('fixed-button').addEventListener('click', function () {
-    currentDayOffset = 0;
-    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
-    updateDayDisplay();
-    updateTimeSlots(); // Обновляем временные слоты
-    document.getElementById('modal').style.display = 'flex';
-    showStep(1);
-
-    // Инициализация календаря
-    if (flatpickrInstance) {
-        flatpickrInstance.destroy();
-    }
-
-    flatpickrInstance = flatpickr("#date-picker", {
-        locale: "ru",
-        dateFormat: "d.m.Y",
-        defaultDate: selectedDate,
-        onChange: function (selectedDates) {
-            selectedDate = selectedDates[0];
-            updateDayDisplay();
-            updateTimeSlots();
-        },
-    });
-});
-
 // Показ текущего шага и скрытие остальных
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
@@ -613,5 +587,31 @@ document.getElementById('copy-phone-number').addEventListener('click', function 
         alert('Номер скопирован: ' + phoneNumber);
     }).catch(function (error) {
         console.error('Ошибка при копировании: ', error);
+    });
+});
+
+// Явная инициализация обработчика для кнопки "Записаться сейчас"
+document.getElementById('fixed-button').addEventListener('click', function () {
+    currentDayOffset = 0;
+    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
+    updateDayDisplay();
+    updateTimeSlots(); // Обновляем временные слоты
+    document.getElementById('modal').style.display = 'flex';
+    showStep(1);
+
+    // Инициализация календаря
+    if (flatpickrInstance) {
+        flatpickrInstance.destroy();
+    }
+
+    flatpickrInstance = flatpickr("#date-picker", {
+        locale: "ru",
+        dateFormat: "d.m.Y",
+        defaultDate: selectedDate,
+        onChange: function (selectedDates) {
+            selectedDate = selectedDates[0];
+            updateDayDisplay();
+            updateTimeSlots();
+        },
     });
 });
