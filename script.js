@@ -6,12 +6,18 @@ let flatpickrInstance; // Экземпляр календаря
 
 // Функция для обновления отображения даты
 function updateDayDisplay() {
+    const dateDisplayElement = document.getElementById('date-display');
+    if (!dateDisplayElement) {
+        console.error("Элемент #date-display не найден!");
+        return;
+    }
+
     const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
         day: 'numeric',
         month: 'long',
         year: 'numeric',
     });
-    document.getElementById('date-display').textContent = formattedDate;
+    dateDisplayElement.textContent = formattedDate;
 }
 
 // Функция для изменения дня с помощью стрелок
@@ -54,15 +60,22 @@ function openCalendar() {
 }
 
 // Инициализация при открытии модального окна
-document.getElementById('fixed-button').addEventListener('click', function () {
-    currentDayOffset = 0;
-    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
-    updateDayDisplay();
-    updateTimeSlots();
+document.addEventListener('DOMContentLoaded', function () {
+    const fixedButton = document.getElementById('fixed-button');
+    if (fixedButton) {
+        fixedButton.addEventListener('click', function () {
+            currentDayOffset = 0;
+            selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
+            updateDayDisplay();
+            updateTimeSlots();
 
-    // Открываем модальное окно
-    document.getElementById('modal').style.display = 'flex';
-    showStep(1);
+            // Открываем модальное окно
+            document.getElementById('modal').style.display = 'flex';
+            showStep(1);
+        });
+    } else {
+        console.error("Элемент #fixed-button не найден!");
+    }
 });
 
 // ------------ Общие функции интерфейса ------------
@@ -453,14 +466,21 @@ function updateConfirmButton() {
 // ------------ Инициализация и обработчики ------------
 
 // Инициализация базы данных при открытии модального окна
-document.getElementById('fixed-button').addEventListener('click', async function () {
-    try {
-        db = await dbFunctions.initDatabase();
-        const brands = await dbFunctions.getBrands(db);
-        populateBrands(brands);
-        showStep(1);
-    } catch (error) {
-        console.error("Ошибка:", error);
+document.addEventListener('DOMContentLoaded', function () {
+    const fixedButton = document.getElementById('fixed-button');
+    if (fixedButton) {
+        fixedButton.addEventListener('click', async function () {
+            try {
+                db = await dbFunctions.initDatabase();
+                const brands = await dbFunctions.getBrands(db);
+                populateBrands(brands);
+                showStep(1);
+            } catch (error) {
+                console.error("Ошибка:", error);
+            }
+        });
+    } else {
+        console.error("Элемент #fixed-button не найден!");
     }
 });
 
@@ -675,27 +695,34 @@ document.getElementById('copy-phone-number').addEventListener('click', function 
 });
 
 // Явная инициализация обработчика для кнопки "Записаться сейчас"
-document.getElementById('fixed-button').addEventListener('click', function () {
-    currentDayOffset = 0;
-    selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
-    updateDayDisplay();
-    updateTimeSlots(); // Обновляем временные слоты
-    document.getElementById('modal').style.display = 'flex';
-    showStep(1);
-
-    // Инициализация календаря
-    if (flatpickrInstance) {
-        flatpickrInstance.destroy();
-    }
-
-    flatpickrInstance = flatpickr("#date-picker", {
-        locale: "ru",
-        dateFormat: "d.m.Y",
-        defaultDate: selectedDate,
-        onChange: function (selectedDates) {
-            selectedDate = selectedDates[0];
+document.addEventListener('DOMContentLoaded', function () {
+    const fixedButton = document.getElementById('fixed-button');
+    if (fixedButton) {
+        fixedButton.addEventListener('click', function () {
+            currentDayOffset = 0;
+            selectedDate = new Date(); // Сбрасываем дату на сегодняшний день
             updateDayDisplay();
-            updateTimeSlots();
-        },
-    });
+            updateTimeSlots(); // Обновляем временные слоты
+            document.getElementById('modal').style.display = 'flex';
+            showStep(1);
+
+            // Инициализация календаря
+            if (flatpickrInstance) {
+                flatpickrInstance.destroy();
+            }
+
+            flatpickrInstance = flatpickr("#date-picker", {
+                locale: "ru",
+                dateFormat: "d.m.Y",
+                defaultDate: selectedDate,
+                onChange: function (selectedDates) {
+                    selectedDate = selectedDates[0];
+                    updateDayDisplay();
+                    updateTimeSlots();
+                },
+            });
+        });
+    } else {
+        console.error("Элемент #fixed-button не найден!");
+    }
 });
