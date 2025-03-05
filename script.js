@@ -60,6 +60,13 @@ function showStep(step) {
         validateStep4();
         setupStep4Listeners();
     }
+
+    // Инициализация даты при открытии шага 3
+    if (step === 3) {
+        selectedDate = new Date();
+        updateDayDisplay();
+        updateTimeSlots(); // Обновляем временные слоты при изменении даты
+    }
 }
 
 function nextStep() {
