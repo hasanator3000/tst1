@@ -1,10 +1,9 @@
 // ------------ Глобальные переменные ------------
-let db; 
-let currentDayOffset = 0; 
-// Добавляем переменные для календаря
-let currentMonth = new Date().getMonth();
-let currentYear = new Date().getFullYear();
-let selectedDate = null;
+
+let db; // База данных
+let currentDayOffset = 0; // Смещение для выбора даты
+let selectedDate = new Date();
+
 // ------------ Общие функции интерфейса ------------
 
 // Функция для кнопки "Читать полностью" и "Скрыть"
@@ -26,83 +25,7 @@ function toggleReadMore() {
         hideButton.style.display = 'block';
     }
 }
-// ------------ Функции календаря ------------
-function changeMonth(offset) {
-    currentMonth += offset;
-    if(currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-    }
-    if(currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-    }
-    generateCalendar(currentMonth, currentYear);
-}
 
-function generateCalendar(month, year) {
-    const calendarDays = document.getElementById('calendar-days');
-    const monthYear = document.getElementById('current-month');
-    
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const prevLastDay = new Date(year, month, 0).getDate();
-    
-    monthYear.textContent = 
-        `${firstDay.toLocaleString('ru-RU', { month: 'long' })} ${year}`;
-
-    calendarDays.innerHTML = '';
-
-    // Пустые дни предыдущего месяца
-    for(let i = firstDay.getDay() - 1; i > 0; i--) {
-        const day = document.createElement('div');
-        day.className = 'day disabled';
-        day.textContent = prevLastDay - i + 1;
-        calendarDays.appendChild(day);
-    }
-
-    // Дни текущего месяца
-    for(let i = 1; i <= lastDay.getDate(); i++) {
-        const day = document.createElement('div');
-        day.className = 'day';
-        day.textContent = i;
-        
-        const currentDate = new Date(year, month, i);
-        if(currentDate < new Date().setHours(0,0,0,0)) {
-            day.classList.add('disabled');
-        } else {
-            day.addEventListener('click', () => selectDate(currentDate));
-        }
-        
-        calendarDays.appendChild(day);
-    }
-
-    // Пустые дни следующего месяца
-    const nextDays = 7 - calendarDays.children.length % 7;
-    for(let i = 1; i <= nextDays; i++) {
-        const day = document.createElement('div');
-        day.className = 'day disabled';
-        day.textContent = i;
-        calendarDays.appendChild(day);
-    }
-}
-
-function selectDate(date) {
-    selectedDate = date;
-    document.querySelectorAll('.day').forEach(day => 
-        day.classList.remove('selected'));
-    
-    const days = document.getElementsByClassName('day');
-    Array.from(days).forEach(day => {
-        if(parseInt(day.textContent) === date.getDate() && 
-           !day.classList.contains('disabled')) {
-            day.classList.add('selected');
-        }
-    });
-    
-    updateTimeSlots();
-    updateConfirmButton();
-}
 // ------------ Функции для модального окна ------------
 
 // Открытие модального окна
@@ -139,13 +62,11 @@ function showStep(step) {
         setupStep4Listeners();
     }
 
-    // Инициализация календаря при открытии шага 3
+    // Инициализация даты при открытии шага 3
     if (step === 3) {
-        const today = new Date();
-        currentMonth = today.getMonth();
-        currentYear = today.getFullYear();
-        generateCalendar(currentMonth, currentYear);
-        selectedDate = null;
+        selectedDate = new Date();
+        updateDayDisplay();
+        updateTimeSlots(); // Обновляем временные слоты при изменении даты
     }
 }
 
