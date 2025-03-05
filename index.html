@@ -254,22 +254,38 @@
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
-          <!-- Шаг 3: Выбор даты и времени -->
+         <!-- Заменить существующий блок step3 -->
 <div id="step3" class="step" style="display: none;">
     <h2>Выберите дату и время</h2>
-    <div class="day-selector">
+    
+    <!-- Блок выбора даты -->
+    <div class="date-selector">
         <div class="day-button" onclick="changeDay(-1)">
             <div class="triangle-left"></div>
         </div>
-        <div id="current-day" class="current-day"></div>
+        <div class="date-display" onclick="toggleCalendar()">
+            <span id="selected-date"></span>
+            <input type="date" id="hidden-date-input" style="display: none;">
+        </div>
         <div class="day-button" onclick="changeDay(1)">
             <div class="triangle-right"></div>
         </div>
     </div>
+
+    <!-- Кастомный календарь -->
+    <div id="custom-calendar" class="custom-calendar">
+        <div class="calendar-header">
+            <button onclick="changeCalendarMonth(-1)">&lt;</button>
+            <h3 id="calendar-month"></h3>
+            <button onclick="changeCalendarMonth(1)">&gt;</button>
+        </div>
+        <div class="calendar-grid"></div>
+    </div>
+
+    <!-- Блок выбора времени -->
     <div class="time-slots"></div>
     <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
 </div>
-
             <!-- Шаг 4: Ввод данных -->
             <div id="step4" class="step" style="display: none;">
                 <h2>Введите ваши данные</h2>
