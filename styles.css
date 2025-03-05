@@ -620,6 +620,8 @@ input[type="tel"]:focus {
     background-color: #ffffff;
 }
 
+/* Добавить в конец файла */
+/* Кастомный календарь */
 .custom-calendar {
     display: none;
     position: absolute;
@@ -629,19 +631,51 @@ input[type="tel"]:focus {
     z-index: 1000;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 280px; /* Фиксированная ширина */
-    font-size: 12px; /* Уменьшенный размер шрифта */
+    width: 280px;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding: 0 5px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
 }
 
 .calendar-day {
-    padding: 6px; /* Уменьшенный padding */
+    padding: 6px;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
     min-width: 30px;
     height: 30px;
     line-height: 30px;
 }
 
+.calendar-day:hover {
+    background: #f0f0f0;
+}
+
+.selected-day {
+    background: #000 !important;
+    color: white !important;
+}
+
 .date-display {
+    padding: 10px 15px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    background: #f5f5f5;
+    font-size: 14px;
+    cursor: pointer;
     min-width: 180px;
     text-align: center;
-    font-size: 14px;
 }
