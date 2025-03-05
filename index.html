@@ -254,8 +254,7 @@
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
-         <!-- Заменить существующий блок step3 -->
-<div id="step3" class="step" style="display: none;">
+       <div id="step3" class="step" style="display: none;">
     <h2>Выберите дату и время</h2>
     
     <!-- Блок выбора даты -->
@@ -278,12 +277,25 @@
             <button onclick="changeCalendarMonth(-1)">&lt;</button>
             <h3 id="calendar-month"></h3>
             <button onclick="changeCalendarMonth(1)">&gt;</button>
+            <button class="close-calendar" onclick="toggleCalendar()">×</button>
         </div>
-        <div class="calendar-grid"></div>
+        <div class="weekdays">
+            <div>Пн</div>
+            <div>Вт</div>
+            <div>Ср</div>
+            <div>Чт</div>
+            <div>Пт</div>
+            <div>Сб</div>
+            <div>Вс</div>
+        </div>
+        <div id="calendar-days" class="calendar-days"></div>
     </div>
 
     <!-- Блок выбора времени -->
-    <div class="time-slots"></div>
+    <div class="time-slots-container">
+        <h3>Доступное время</h3>
+        <div class="time-slots"></div>
+    </div>
     <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
 </div>
             <!-- Шаг 4: Ввод данных -->
