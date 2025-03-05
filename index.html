@@ -257,32 +257,15 @@
           <!-- Шаг 3: Выбор даты и времени -->
 <div id="step3" class="step" style="display: none;">
     <h2>Выберите дату и время</h2>
-    <!-- Добавьте это в секцию шага 3 вместо текущего day-selector -->
-<div id="step3" class="step" style="display: none;">
-    <h2>Выберите дату и время</h2>
-    <div class="calendar">
-        <div class="calendar-header">
-            <div class="nav-button" onclick="changeMonth(-1)">❮</div>
-            <div id="current-month" class="month-year"></div>
-            <div class="nav-button" onclick="changeMonth(1)">❯</div>
+    <div class="day-selector">
+        <div class="day-button" onclick="changeDay(-1)">
+            <div class="triangle-left"></div>
         </div>
-        <div class="weekdays">
-            <div>Пн</div>
-            <div>Вт</div>
-            <div>Ср</div>
-            <div>Чт</div>
-            <div>Пт</div>
-            <div>Сб</div>
-            <div>Вс</div>
+        <div id="current-day" class="current-day"></div>
+        <div class="day-button" onclick="changeDay(1)">
+            <div class="triangle-right"></div>
         </div>
-        <div id="calendar-days" class="calendar-days"></div>
     </div>
-    <div class="time-slots-container">
-        <h3>Доступное время</h3>
-        <div class="time-slots"></div>
-    </div>
-    <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
-</div>
     <div class="time-slots"></div>
     <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
 </div>
