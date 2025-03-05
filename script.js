@@ -3,6 +3,92 @@
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
 let selectedDate = new Date();
+let currentCalendarDate = new Date();
+let isCalendarOpen = false;
+
+// Функции для работы с датами
+function updateSelectedDate(offset = 0) {
+    currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
+    document.getElementById('selected-date').textContent = 
+        currentCalendarDate.toLocaleDateString('ru-RU');
+    updateTimeSlots();
+}
+
+function toggleCalendar() {
+    const calendar = document.getElementById('custom-calendar');
+    isCalendarOpen = !isCalendarOpen;
+    calendar.style.display = isCalendarOpen ? 'block' : 'none';
+    if(isCalendarOpen) generateCalendar();
+}
+
+function generateCalendar() {
+    const monthNames = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
+
+    const calendarGrid = document.querySelector('.calendar-grid');
+    const today = new Date();
+    
+    // Очистка календаря
+    calendarGrid.innerHTML = '';
+    
+    // Заголовок
+    document.getElementById('calendar-month').textContent = 
+        `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getFullYear()}`;
+
+    // Генерация дней
+    const firstDay = new Date(
+        currentCalendarDate.getFullYear(),
+        currentCalendarDate.getMonth(),
+        1
+    );
+
+    const lastDay = new Date(
+        currentCalendarDate.getFullYear(),
+        currentCalendarDate.getMonth() + 1,
+        0
+    );
+
+    // Пустые ячейки в начале
+    for(let i = 0; i < firstDay.getDay(); i++) {
+        calendarGrid.appendChild(document.createElement('div'));
+    }
+
+    // Дни месяца
+    for(let day = 1; day <= lastDay.getDate(); day++) {
+        const dayElement = document.createElement('div');
+        dayElement.className = 'calendar-day';
+        dayElement.textContent = day;
+        
+        if(day === currentCalendarDate.getDate()) {
+            dayElement.classList.add('selected-day');
+        }
+
+        dayElement.onclick = () => {
+            currentCalendarDate.setDate(day);
+            updateSelectedDate();
+            toggleCalendar();
+        };
+        
+        calendarGrid.appendChild(dayElement);
+    }
+}
+
+// Обновить функцию changeDay
+function changeDay(offset) {
+    if(!isCalendarOpen) {
+        updateSelectedDate(offset);
+    }
+}
+
+// Инициализация при открытии шага 3
+function showStep(step) {
+    if(step === 3) {
+        currentCalendarDate = new Date();
+        updateSelectedDate();
+    }
+}
 
 // ------------ Общие функции интерфейса ------------
 
