@@ -2,6 +2,7 @@
 
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
+let selectedDate = new Date();
 
 // ------------ Общие функции интерфейса ------------
 
