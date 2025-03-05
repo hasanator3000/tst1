@@ -1,11 +1,13 @@
 // ------------ Глобальные переменные ------------
+
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
 let selectedDate = new Date();
-let currentCalendarDate = new Date();
-let isCalendarOpen = false;
+let currentCalendarDate = new Date(); // НОВОЕ
+let isCalendarOpen = false; // НОВОЕ
 
-// ------------ Функции календаря ------------
+// ------------ Общие функции интерфейса ------------
+// ------------ Функции календаря (НОВОЕ) ------------
 function selectCalendarDay(dayElement, day) {
     currentCalendarDate.setDate(day);
     document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected-day'));
@@ -49,11 +51,12 @@ function toggleCalendar() {
     calendar.style.display = isCalendarOpen ? 'block' : 'none';
     
     if (isCalendarOpen) {
-        currentCalendarDate = new Date(document.getElementById('selected-date').dataset.date || new Date();
+        currentCalendarDate = new Date(document.getElementById('selected-date').dataset.date) || new Date();
         generateCalendar();
     }
 }
 
+// ИЗМЕНЕНО: Функция изменения дня стрелками
 function changeDay(offset) {
     if (!isCalendarOpen) {
         currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
@@ -61,14 +64,14 @@ function changeDay(offset) {
     }
 }
 
+// ИЗМЕНЕНО: Функция обновления отображения даты
 function updateSelectedDate() {
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
     const dateString = currentCalendarDate.toLocaleDateString('ru-RU', options);
     document.getElementById('selected-date').textContent = dateString;
     updateTimeSlots();
 }
-
-// ------------ Общие функции интерфейса ------------
+// Функция для кнопки "Читать полностью" и "Скрыть"
 function toggleReadMore() {
     const hiddenText = document.getElementById('hidden-text');
     const readFullButton = document.getElementById('text1');
@@ -89,11 +92,15 @@ function toggleReadMore() {
 }
 
 // ------------ Функции для модального окна ------------
+
+// Открытие модального окна
 document.getElementById('fixed-button').addEventListener('click', function () {
     document.getElementById('modal').style.display = 'flex';
     showStep(1);
 });
 
+// Показ текущего шага и скрытие остальных
+// ИЗМЕНЕНО: Функция showStep
 function showStep(step) {
     document.querySelectorAll('.step').forEach(function (stepElement) {
         stepElement.style.display = 'none';
@@ -121,11 +128,13 @@ function showStep(step) {
         setupStep4Listeners();
     }
 
+    // НОВОЕ: Инициализация календаря при открытии шага 3
     if (step === 3) {
         currentCalendarDate = new Date();
         updateSelectedDate();
     }
 }
+
 
 function nextStep() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
@@ -141,6 +150,7 @@ function nextStep() {
     }
 }
 
+// Переход на предыдущий шаг
 function prevStep() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (currentStep) {
@@ -152,6 +162,7 @@ function prevStep() {
     updateConfirmButton();
 }
 
+// Функция для сброса модального окна
 function resetModal() {
     document.getElementById('brand').selectedIndex = 0;
     document.getElementById('model').innerHTML = '<option value="">Выберите модель</option>';
@@ -177,12 +188,15 @@ function resetModal() {
     showStep(1);
 }
 
+// Закрытие модального окна
 function closeModal() {
     document.getElementById('modal').style.display = 'none';
     resetModal();
 }
 
 // ------------ Работа с данными ------------
+
+// Заполнение выбора марок
 function populateBrands(brands) {
     const brandSelect = document.getElementById('brand');
     brandSelect.innerHTML = '<option value="">Выберите марку</option>';
@@ -200,6 +214,7 @@ function populateBrands(brands) {
     });
 }
 
+// Заполнение выбора моделей
 function populateModels(models) {
     const modelSelect = document.getElementById('model');
     modelSelect.innerHTML = '<option value="">Выберите модель</option>';
@@ -225,6 +240,7 @@ function populateModels(models) {
     modelSelect.disabled = false;
 }
 
+// Заполнение выбора услуг
 function populateServices(services) {
     const servicesContainer = document.getElementById('services-container');
     servicesContainer.innerHTML = '';
@@ -250,6 +266,7 @@ function populateServices(services) {
     });
 }
 
+// Расчет временных слотов
 function calculateTimeSlots(duration) {
     const slots = [];
     let startTime = new Date();
@@ -294,6 +311,7 @@ function populateTimeSlots(duration) {
     });
 }
 
+// Обновление подытога
 function updateTotal() {
     const selectedServices = document.querySelectorAll('input[name="service"]:checked');
     let total = 0;
@@ -317,6 +335,8 @@ function updateTotal() {
 }
 
 // ------------ Валидация и форматирование ------------
+
+// Автоматическая капитализация первой буквы каждого слова
 function capitalizeInput(input) {
     input.value = input.value
         .toLowerCase()
@@ -325,12 +345,14 @@ function capitalizeInput(input) {
         .join(' ');
 }
 
+// Валидация поля "ФИО" (только буквы и пробелы)
 function validateName(input) {
     input.value = input.value.replace(/[^а-яА-ЯёЁ\s]/g, '');
     capitalizeInput(input);
     validateStep4();
 }
 
+// Форматирование номера телефона
 function formatPhone(input) {
     let phone = input.value.replace(/\D/g, '');
     if (phone.startsWith('7') || phone.startsWith('8')) {
@@ -358,6 +380,7 @@ function formatPhone(input) {
     validateStep4();
 }
 
+// Валидация данных на шаге 4
 function validateStep4() {
     const nameInput = document.getElementById('clientName');
     const phoneInput = document.getElementById('clientPhone');
@@ -372,6 +395,7 @@ function validateStep4() {
     nextButton.disabled = !(name && isPhoneValid && carNumber);
 }
 
+// Добавляем обработчики событий для полей ввода на шаге 4
 function setupStep4Listeners() {
     const nameInput = document.getElementById('clientName');
     const phoneInput = document.getElementById('clientPhone');
@@ -382,6 +406,7 @@ function setupStep4Listeners() {
     carNumberInput.addEventListener('input', validateStep4);
 }
 
+// Обновление состояния кнопки "Подтвердить"
 function updateConfirmButton() {
     const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
@@ -412,6 +437,8 @@ function updateConfirmButton() {
 }
 
 // ------------ Инициализация и обработчики ------------
+
+// Инициализация базы данных при открытии модального окна
 document.getElementById('fixed-button').addEventListener('click', async function () {
     try {
         db = await dbFunctions.initDatabase();
@@ -423,6 +450,7 @@ document.getElementById('fixed-button').addEventListener('click', async function
     }
 });
 
+// Обновление моделей при выборе марки
 document.getElementById('brand').addEventListener('change', async function () {
     try {
         const brandId = this.value;
@@ -442,6 +470,7 @@ document.getElementById('brand').addEventListener('change', async function () {
     }
 });
 
+// Активация кнопки "Подтвердить" при выборе модели
 document.getElementById('model').addEventListener('change', function () {
     const modelId = this.value;
     if (modelId) {
@@ -452,6 +481,7 @@ document.getElementById('model').addEventListener('change', function () {
     updateConfirmButton();
 });
 
+// Получение услуг при выборе модели
 document.getElementById('model').addEventListener('change', async function () {
     try {
         const modelId = this.value;
@@ -466,6 +496,7 @@ document.getElementById('model').addEventListener('change', async function () {
     }
 });
 
+// Функция для получения марки и модели по ID модели
 async function getBrandAndModelName(db, modelId) {
     try {
         const stmt = db.prepare(`
@@ -485,6 +516,7 @@ async function getBrandAndModelName(db, modelId) {
     }
 }
 
+// Добавляем +7 при фокусе на поле ввода телефона
 document.getElementById('clientPhone').addEventListener('focus', function () {
     const phoneInput = this;
     if (!phoneInput.value.startsWith('+7')) {
@@ -492,6 +524,7 @@ document.getElementById('clientPhone').addEventListener('focus', function () {
     }
 });
 
+// Обработка вставки текста в поле "ФИО"
 document.getElementById('clientName').addEventListener('paste', function (event) {
     event.preventDefault();
     const pastedText = (event.clipboardData || window.clipboardData).getData('text');
@@ -499,6 +532,7 @@ document.getElementById('clientName').addEventListener('paste', function (event)
     capitalizeInput(this);
 });
 
+// Скрытие кнопки "Записаться сейчас" при прокрутке до черного поля
 document.addEventListener('scroll', function () {
     const fixedButton = document.getElementById('fixed-button');
     const aboutSection = document.querySelector('.about-section');
@@ -515,12 +549,14 @@ document.addEventListener('scroll', function () {
 });
 
 // ------------ Вспомогательные функции ------------
+
+// Функция для изменения дня
 function changeDay(offset) {
     currentDayOffset += offset;
     selectedDate = new Date();
     selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
     updateDayDisplay();
-    updateTimeSlots();
+    updateTimeSlots(); // Обновляем временные слоты при изменении даты
 }
 
 function updateDayDisplay() {
@@ -533,6 +569,7 @@ function updateDayDisplay() {
     currentDayElement.textContent = formattedDate;
 }
 
+// Инициализация выбора времени
 document.querySelectorAll('.time-slot').forEach(function (slot) {
     slot.addEventListener('click', function () {
         if (!slot.classList.contains('unavailable')) {
@@ -552,6 +589,7 @@ document.querySelectorAll('.time-slot').forEach(function (slot) {
 });
 
 // ------------ Функция для сохранения записи ------------
+
 async function saveAppointment() {
     if (!db) {
         console.error("База данных не инициализирована");
@@ -576,6 +614,7 @@ async function saveAppointment() {
 
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
+    // Получаем выбранную дату
     const selectedDate = new Date();
     selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
     const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
@@ -605,7 +644,7 @@ async function saveAppointment() {
         console.error("Ошибка при сохранении записи:", error);
     }
 }
-
+// Функция для сохранения записи в LocalStorage
 function saveAppointmentToLocalStorage(appointment) {
     const appointments = JSON.parse(localStorage.getItem('appointments')) || [];
     appointments.push(appointment);
@@ -613,14 +652,17 @@ function saveAppointmentToLocalStorage(appointment) {
     console.log('Запись сохранена в LocalStorage:', appointment);
 }
 
+// Открытие модального окна при нажатии на номер телефона
 document.querySelector('.number').addEventListener('click', function () {
     document.getElementById('phone-modal').style.display = 'flex';
 });
 
+// Закрытие модального окна при нажатии на крестик
 document.querySelector('.close-phone-modal').addEventListener('click', function () {
     document.getElementById('phone-modal').style.display = 'none';
 });
 
+// Закрытие модального окна при клике вне его области
 window.addEventListener('click', function (event) {
     const phoneModal = document.getElementById('phone-modal');
     if (event.target === phoneModal) {
@@ -628,6 +670,7 @@ window.addEventListener('click', function (event) {
     }
 });
 
+// Копирование номера телефона
 document.getElementById('copy-phone-number').addEventListener('click', function () {
     const phoneNumber = '+7 (495) 228-64-28';
     navigator.clipboard.writeText(phoneNumber).then(function () {
