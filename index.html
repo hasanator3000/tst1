@@ -272,22 +272,23 @@
 
     <!-- Кастомный календарь -->
     <div id="custom-calendar" class="custom-calendar">
-        <div class="calendar-header">
-            <button onclick="changeCalendarMonth(-1)">&lt;</button>
-            <h3 id="calendar-month"></h3>
-            <button onclick="changeCalendarMonth(1)">&gt;</button>
-        </div>
-        <div class="weekdays">
-            <div>Пн</div>
-            <div>Вт</div>
-            <div>Ср</div>
-            <div>Чт</div>
-            <div>Пт</div>
-            <div>Сб</div>
-            <div>Вс</div>
-        </div>
-        <div id="calendar-days" class="calendar-days"></div>
+    <div class="calendar-header">
+        <button onclick="changeCalendarMonth(-1)">&lt;</button>
+        <h3 id="calendar-month"></h3>
+        <button onclick="changeCalendarMonth(1)">&gt;</button>
+        <button class="close-calendar" onclick="toggleCalendar()">×</button>
     </div>
+    <div class="weekdays">
+        <div>Пн</div>
+        <div>Вт</div>
+        <div>Ср</div>
+        <div>Чт</div>
+        <div>Пт</div>
+        <div>Сб</div>
+        <div>Вс</div>
+    </div>
+    <div id="calendar-days" class="calendar-days"></div>
+</div>
 
     <!-- Блок выбора времени -->
     <div class="time-slots-container">
