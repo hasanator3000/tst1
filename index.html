@@ -254,7 +254,7 @@
                 <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
-       <div id="step3" class="step" style="display: none;">
+      <div id="step3" class="step" style="display: none;">
     <h2>Выберите дату и время</h2>
     
     <!-- Блок выбора даты -->
@@ -264,7 +264,6 @@
         </div>
         <div class="date-display" onclick="toggleCalendar()">
             <span id="selected-date"></span>
-            <input type="date" id="hidden-date-input" style="display: none;">
         </div>
         <div class="day-button" onclick="changeDay(1)">
             <div class="triangle-right"></div>
@@ -277,7 +276,6 @@
             <button onclick="changeCalendarMonth(-1)">&lt;</button>
             <h3 id="calendar-month"></h3>
             <button onclick="changeCalendarMonth(1)">&gt;</button>
-            <button class="close-calendar" onclick="toggleCalendar()">×</button>
         </div>
         <div class="weekdays">
             <div>Пн</div>
