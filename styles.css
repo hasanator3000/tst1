@@ -561,63 +561,53 @@ input[type="tel"]:focus {
     visibility: hidden;
 }
 
-.day-selector {
+/* Стили для блока выбора даты */
+.date-selector {
     display: flex;
-    justify-content: center;
     align-items: center;
     gap: 10px;
     margin-bottom: 20px;
 }
 
-.day-button {
-    background-color: transparent;
-    border: none;
+.date-display {
+    padding: 10px 15px;
+    border: 2px solid #000;
+    border-radius: 8px;
+    background: #f5f5f5;
+    font-size: 14px;
     cursor: pointer;
-    padding: 0;
+    text-align: center;
+    min-width: 180px;
+    user-select: none;
+}
+
+.day-button {
+    cursor: pointer;
+    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
+    background: #f5f5f5;
+    border: 2px solid #000;
+    border-radius: 8px;
+    width: 30px;
+    height: 30px;
 }
 
-.triangle-left {
-    width: 0;
-    height: 0;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-    border-right: 10px solid #000000;
-}
-
+.triangle-left,
 .triangle-right {
     width: 0;
     height: 0;
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
-    border-left: 10px solid #000000;
 }
 
-.date-picker {
-    width: 150px;
-    padding: 10px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    background-color: #eeeeee;
-    font-size: 14px;
-    font-weight: bold;
-    color: #000000;
-    text-align: center;
-    cursor: pointer;
+.triangle-left {
+    border-right: 10px solid #000;
 }
 
-.date-picker:hover {
-    border-color: #56595a;
-}
-
-.date-picker:focus {
-    outline: none;
-    border-color: #000000;
-    background-color: #ffffff;
+.triangle-right {
+    border-left: 10px solid #000;
 }
 
 /* Стили для календаря */
@@ -630,8 +620,8 @@ input[type="tel"]:focus {
     z-index: 1000;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 240px; /* Уменьшенная ширина */
-    font-size: 12px; /* Уменьшенный размер шрифта */
+    width: 240px; /* Уменьшенный размер */
+    font-size: 12px;
     margin-top: 5px;
 }
 
@@ -640,7 +630,6 @@ input[type="tel"]:focus {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    padding: 0 5px;
 }
 
 .calendar-header h3 {
@@ -653,11 +642,6 @@ input[type="tel"]:focus {
     border: none;
     cursor: pointer;
     font-size: 16px;
-}
-
-.close-calendar {
-    font-size: 20px;
-    color: #666;
 }
 
 .weekdays {
@@ -697,15 +681,4 @@ input[type="tel"]:focus {
 .calendar-day.disabled {
     color: #ccc;
     cursor: not-allowed;
-}
-
-.date-display {
-    padding: 10px 15px;
-    border: 2px solid #000;
-    border-radius: 8px;
-    background: #f5f5f5;
-    font-size: 14px;
-    cursor: pointer;
-    min-width: 180px;
-    text-align: center;
 }
