@@ -77,7 +77,6 @@
                     <h2>Выберите дату и время</h2>
 
                     <!-- Блок выбора даты -->
-                    <!-- Внутри модального окна, в блоке выбора даты -->
 <div id="date-picker">
     <div id="selected-date">
         <button id="prev-day" onclick="changeDay(-1)">‹</button>
@@ -92,6 +91,7 @@
             <button onclick="changeMonth(-1)">‹</button>
             <span id="current-month"></span>
             <button onclick="changeMonth(1)">›</button>
+            <button class="close-calendar" onclick="toggleCalendar()">×</button>
         </div>
         <div class="calendar-days">
             <div>Пн</div>
