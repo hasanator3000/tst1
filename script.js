@@ -75,6 +75,16 @@ function toggleCalendar() {
     }
 }
 
+// Закрытие календаря при клике вне его области
+document.addEventListener('click', function (event) {
+    const calendar = document.getElementById('calendar');
+    const datePicker = document.getElementById('date-picker');
+
+    if (!datePicker.contains(event.target)) {
+        calendar.style.display = 'none';
+    }
+});
+
 // Инициализация календаря при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     updateDateDisplay(); // Обновляем отображение даты
