@@ -7,7 +7,7 @@ function updateDateDisplay() {
     const currentDateElement = document.getElementById('current-date');
     const currentDayElement = document.getElementById('current-day');
     
-    // Форматируем дату и день недели
+    // Форматируем дату и день недели в одну строку
     currentDateElement.textContent = selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
     currentDayElement.textContent = selectedDate.toLocaleDateString('ru-RU', { weekday: 'long' });
 }
