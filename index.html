@@ -78,9 +78,13 @@
 
                     <!-- Блок выбора даты -->
                 <div id="date-picker">
-                    <div id="selected-date" onclick="toggleCalendar()">
-                        <span id="current-date">Сегодня</span>
-                        <span id="current-day"></span>
+                   <div id="selected-date">
+                        <button id="prev-day" onclick="changeDay(-1)">‹</button>
+                        <div id="date-display" onclick="toggleCalendar()">
+                            <span id="current-date">Сегодня</span>
+                            <span id="current-day"></span>
+                        </div>
+                        <button id="next-day" onclick="changeDay(1)">›</button>
                     </div>
                     <div id="calendar" style="display: none;">
                         <div class="calendar-header">
