@@ -1,9 +1,10 @@
 // ------------ Глобальные переменные ------------
 let db; // База данных
 let currentDayOffset = 0; // Смещение для выбора даты
-let selectedDate = new Date();
+let selectedDate = null;
 let currentCalendarDate = new Date(); // НОВОЕ
 let isCalendarOpen = false; // НОВОЕ
+let currentDate = new Date();
 
 // ------------ Функции календаря (НОВОЕ) ------------
 function selectCalendarDay(dayElement, day) {
@@ -14,61 +15,70 @@ function selectCalendarDay(dayElement, day) {
     toggleCalendar();
 }
 
-// Функция для генерации календаря
-function generateCalendar() {
-    const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-                       'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-    
-    const calendarGrid = document.querySelector('.calendar-days');
+// Функция для отображения/скрытия календаря
+function toggleCalendar() {
+    const calendar = document.getElementById('calendar');
+    if (calendar.style.display === 'none') {
+        renderCalendar(currentDate);
+        calendar.style.display = 'block';
+    } else {
+        calendar.style.display = 'none';
+    }
+}
+
+// Функция для отрисовки календаря
+function renderCalendar(date) {
+    const calendarGrid = document.getElementById('calendar-grid');
+    const currentMonthElement = document.getElementById('current-month');
+    const year = date.getFullYear();
+    const month = date.getMonth();
+
+    currentMonthElement.textContent = new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(date);
+
+    const firstDayOfMonth = new Date(year, month, 1);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const startingDay = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
+
     calendarGrid.innerHTML = '';
 
-    // Заголовок календаря
-    document.getElementById('calendar-month').textContent = 
-        `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getFullYear()}`;
-
-    // Дни месяца
-    const firstDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), 1);
-    const lastDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Пн = 0, Вс = 6
-
-    // Пустые дни в начале месяца
+    // Заполняем пустые ячейки до первого дня месяца
     for (let i = 0; i < startingDay; i++) {
-        const emptyDay = document.createElement('div');
-        emptyDay.className = 'calendar-day empty';
-        calendarGrid.appendChild(emptyDay);
+        calendarGrid.appendChild(document.createElement('div'));
     }
 
-    // Дни месяца
+    // Заполняем дни месяца
     for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement('div');
-        dayElement.className = 'calendar-day';
         dayElement.textContent = day;
-        
-        if (day === currentCalendarDate.getDate()) {
+        dayElement.addEventListener('click', () => selectDate(new Date(year, month, day)));
+        if (selectedDate && selectedDate.toDateString() === new Date(year, month, day).toDateString()) {
             dayElement.classList.add('selected');
         }
-
-        dayElement.onclick = () => {
-            currentCalendarDate.setDate(day);
-            updateSelectedDate();
-            toggleCalendar(); // Закрываем календарь после выбора даты
-        };
-
         calendarGrid.appendChild(dayElement);
     }
 }
 
-// Функция для переключения календаря
-function toggleCalendar() {
-    const calendar = document.getElementById('custom-calendar');
-    isCalendarOpen = !isCalendarOpen;
-    calendar.style.display = isCalendarOpen ? 'block' : 'none';
-    
-    if (isCalendarOpen) {
-        generateCalendar();
-    }
+// Функция для выбора даты
+function selectDate(date) {
+    selectedDate = date;
+    const currentDateElement = document.getElementById('current-date');
+    const currentDayElement = document.getElementById('current-day');
+    currentDateElement.textContent = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    currentDayElement.textContent = date.toLocaleDateString('ru-RU', { weekday: 'long' });
+    document.getElementById('calendar').style.display = 'none';
+    updateConfirmButton();
 }
+
+// Функция для изменения месяца
+function changeMonth(offset) {
+    currentDate.setMonth(currentDate.getMonth() + offset);
+    renderCalendar(currentDate);
+}
+
+// Инициализация календаря при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    selectDate(new Date());
+});
 
 // Функция для изменения дня стрелками
 function changeDay(offset) {
@@ -406,7 +416,7 @@ function setupStep4Listeners() {
 }
 
 function updateConfirmButton() {
-    const currentStep = document.querySelector('.step[style="display: flex;"]');
+  const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
 
     const stepNumber = parseInt(currentStep.id.replace('step', ''));
@@ -424,7 +434,7 @@ function updateConfirmButton() {
             break;
         case 3:
             const timeSlotSelected = document.querySelector('.time-slot.selected');
-            confirmButton.disabled = !timeSlotSelected;
+            confirmButton.disabled = !(timeSlotSelected && selectedDate);
             break;
         case 4:
             validateStep4();
