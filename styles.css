@@ -686,3 +686,20 @@ input[type="tel"]:focus {
     background-color: #000000;
     color: #ffffff;
 }
+
+#date-display {
+    flex-grow: 1;
+    text-align: center;
+}
+
+#prev-day, #next-day {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 10px;
+}
+
+#prev-day:hover, #next-day:hover {
+    color: #56595a;
+}
