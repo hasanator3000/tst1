@@ -1,21 +1,8 @@
 // ------------ Глобальные переменные ------------
 let db; // База данных
-let currentDayOffset = 0; // Смещение для выбора даты
-let selectedDate = null;
-let currentCalendarDate = new Date(); // НОВОЕ
-let isCalendarOpen = false; // НОВОЕ
-let currentDate = new Date();
+let selectedDate = new Date(); // Выбранная дата
 
-// ------------ Функции календаря (НОВОЕ) ------------
-function selectCalendarDay(dayElement, day) {
-    currentCalendarDate.setDate(day);
-    document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('selected-day'));
-    dayElement.classList.add('selected-day');
-    updateSelectedDate();
-    toggleCalendar();
-}
-
-// Функция для обновления отображения даты
+// ------------ Функции календаря ------------
 function updateDateDisplay() {
     const currentDateElement = document.getElementById('current-date');
     const currentDayElement = document.getElementById('current-day');
@@ -25,24 +12,13 @@ function updateDateDisplay() {
     currentDayElement.textContent = selectedDate.toLocaleDateString('ru-RU', { weekday: 'long' });
 }
 
-// Функция для отображения/скрытия календаря
-function toggleCalendar() {
-    const calendar = document.getElementById('calendar');
-    if (calendar.style.display === 'none') {
-        renderCalendar(currentDate);
-        calendar.style.display = 'block';
-    } else {
-        calendar.style.display = 'none';
-    }
-}
-
-// Функция для отрисовки календаря
 function renderCalendar(date) {
     const calendarGrid = document.getElementById('calendar-grid');
     const currentMonthElement = document.getElementById('current-month');
     const year = date.getFullYear();
     const month = date.getMonth();
 
+    // Отображаем текущий месяц и год
     currentMonthElement.textContent = new Intl.DateTimeFormat('ru-RU', { month: 'long', year: 'numeric' }).format(date);
 
     const firstDayOfMonth = new Date(year, month, 1);
@@ -72,48 +48,38 @@ function renderCalendar(date) {
     }
 }
 
-// Функция для изменения месяца в календаре
 function changeMonth(offset) {
-    currentDate.setMonth(currentDate.getMonth() + offset);
-    renderCalendar(currentDate);
+    selectedDate.setMonth(selectedDate.getMonth() + offset); // Изменяем месяц у выбранной даты
+    renderCalendar(selectedDate); // Перерисовываем календарь
 }
 
-// Функция для выбора даты в календаре
 function selectDate(date) {
     selectedDate = date; // Обновляем выбранную дату
     updateDateDisplay(); // Обновляем отображение даты
-    renderCalendar(currentDate); // Перерисовываем календарь, чтобы выделить новую дату
+    renderCalendar(selectedDate); // Перерисовываем календарь с новой датой
+}
+
+function changeDay(offset) {
+    selectedDate.setDate(selectedDate.getDate() + offset); // Изменяем выбранную дату
+    updateDateDisplay(); // Обновляем отображение даты
+    renderCalendar(selectedDate); // Перерисовываем календарь с новой датой
+}
+
+function toggleCalendar() {
+    const calendar = document.getElementById('calendar');
+    if (calendar.style.display === 'none') {
+        renderCalendar(selectedDate);
+        calendar.style.display = 'block';
+    } else {
+        calendar.style.display = 'none';
+    }
 }
 
 // Инициализация календаря при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    selectedDate = new Date(); // Устанавливаем текущую дату
-    updateDateDisplay(); // Обновляем отображение
-    renderCalendar(currentDate); // Рисуем календарь
-});
-
-// Функция для изменения дня с помощью стрелочек
-function changeDay(offset) {
-    selectedDate.setDate(selectedDate.getDate() + offset); // Изменяем выбранную дату
     updateDateDisplay(); // Обновляем отображение даты
-    renderCalendar(currentDate); // Перерисовываем календарь, чтобы выделить новую дату
-}
-
-
-// Функция для обновления отображения даты
-function updateSelectedDate() {
-    const options = { weekday: 'long', day: 'numeric', month: 'long' };
-    const dateString = currentCalendarDate.toLocaleDateString('ru-RU', options);
-    document.getElementById('selected-date').textContent = dateString;
-    updateTimeSlots();
-}
-
-// Функция для изменения месяца в календаре
-function changeCalendarMonth(offset) {
-    currentCalendarDate.setMonth(currentCalendarDate.getMonth() + offset);
-    generateCalendar();
-}
-
+    renderCalendar(selectedDate); // Рисуем календарь с текущей датой
+});
 
 // ------------ Общие функции интерфейса ------------
 function toggleReadMore() {
@@ -168,9 +134,9 @@ function showStep(step) {
         setupStep4Listeners();
     }
 
-     if (step === 3) {
-        currentCalendarDate = new Date();
-        updateSelectedDate();
+    if (step === 3) {
+        updateDateDisplay();
+        renderCalendar(selectedDate);
     }
 }
 
@@ -430,7 +396,7 @@ function setupStep4Listeners() {
 }
 
 function updateConfirmButton() {
-  const currentStep = document.querySelector('.step[style="display: flex;"]');
+    const currentStep = document.querySelector('.step[style="display: flex;"]');
     if (!currentStep) return;
 
     const stepNumber = parseInt(currentStep.id.replace('step', ''));
@@ -562,41 +528,21 @@ document.addEventListener('scroll', function () {
 });
 
 // ------------ Вспомогательные функции ------------
-function changeDay(offset) {
-    currentDayOffset += offset;
-    selectedDate = new Date();
-    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
-    updateDayDisplay();
-    updateTimeSlots();
-}
+function updateTimeSlots() {
+    const selectedServices = document.querySelectorAll('input[name="service"]:checked');
+    let totalDuration = 0;
 
-function updateDayDisplay() {
-    const currentDayElement = document.getElementById('current-day');
-    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long'
+    selectedServices.forEach(service => {
+        totalDuration += parseInt(service.dataset.duration);
     });
-    currentDayElement.textContent = formattedDate;
+
+    if (selectedServices.length > 0) {
+        populateTimeSlots(totalDuration);
+    } else {
+        const timeSlotsContainer = document.querySelector('.time-slots');
+        timeSlotsContainer.innerHTML = '';
+    }
 }
-
-document.querySelectorAll('.time-slot').forEach(function (slot) {
-    slot.addEventListener('click', function () {
-        if (!slot.classList.contains('unavailable')) {
-            document.querySelectorAll('.time-slot').forEach(function (s) {
-                s.classList.remove('selected');
-                s.style.backgroundColor = '';
-                s.style.color = '';
-            });
-
-            slot.classList.add('selected');
-            slot.style.backgroundColor = 'black';
-            slot.style.color = 'white';
-
-            updateConfirmButton();
-        }
-    });
-});
 
 // ------------ Функция для сохранения записи ------------
 async function saveAppointment() {
@@ -623,21 +569,13 @@ async function saveAppointment() {
 
     const brandAndModelName = await getBrandAndModelName(db, modelId);
 
-    const selectedDate = new Date();
-    selectedDate.setDate(selectedDate.getDate() + currentDayOffset);
-    const formattedDate = selectedDate.toLocaleDateString('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
     const appointment = {
         clientName,
         clientPhone,
         carNumber: clientCarNumber,
         model: brandAndModelName,
         services: selectedServices,
-        date: formattedDate,
+        date: selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }),
         startTime,
         endTime,
         timestamp: new Date().toLocaleString()
