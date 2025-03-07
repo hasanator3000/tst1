@@ -19,6 +19,8 @@ function selectCalendarDay(dayElement, day) {
 function updateDateDisplay() {
     const currentDateElement = document.getElementById('current-date');
     const currentDayElement = document.getElementById('current-day');
+    
+    // Форматируем дату и день недели
     currentDateElement.textContent = selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
     currentDayElement.textContent = selectedDate.toLocaleDateString('ru-RU', { weekday: 'long' });
 }
@@ -91,8 +93,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Функция для изменения дня
 function changeDay(offset) {
-    selectedDate.setDate(selectedDate.getDate() + offset);
-    updateDateDisplay();
+    if (!selectedDate) {
+        selectedDate = new Date(); // Инициализация, если selectedDate не задан
+    }
+    selectedDate.setDate(selectedDate.getDate() + offset); // Изменяем дату
+    updateDateDisplay(); // Обновляем отображение даты
 }
 
 
