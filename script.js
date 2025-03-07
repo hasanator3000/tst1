@@ -15,6 +15,14 @@ function selectCalendarDay(dayElement, day) {
     toggleCalendar();
 }
 
+// Функция для обновления отображения даты
+function updateDateDisplay() {
+    const currentDateElement = document.getElementById('current-date');
+    const currentDayElement = document.getElementById('current-day');
+    currentDateElement.textContent = selectedDate.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+    currentDayElement.textContent = selectedDate.toLocaleDateString('ru-RU', { weekday: 'long' });
+}
+
 // Функция для отображения/скрытия календаря
 function toggleCalendar() {
     const calendar = document.getElementById('calendar');
@@ -77,14 +85,16 @@ function changeMonth(offset) {
 
 // Инициализация календаря при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    selectDate(new Date());
+    selectedDate = new Date();
+    updateDateDisplay();
 });
 
-// Функция для изменения дня стрелками
+// Функция для изменения дня
 function changeDay(offset) {
-    currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
-    updateSelectedDate();
+    selectedDate.setDate(selectedDate.getDate() + offset);
+    updateDateDisplay();
 }
+
 
 // Функция для обновления отображения даты
 function updateSelectedDate() {
