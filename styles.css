@@ -631,8 +631,9 @@ input[type="tel"]:focus {
 #calendar {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px; /* Уменьшенный размер */
     background-color: #ffffff;
     border: 2px solid #000000;
     border-radius: 10px;
@@ -640,6 +641,7 @@ input[type="tel"]:focus {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     margin-top: 5px;
+    display: none;
 }
 
 .calendar-header {
@@ -647,6 +649,7 @@ input[type="tel"]:focus {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .calendar-header button {
@@ -654,6 +657,27 @@ input[type="tel"]:focus {
     border: none;
     font-size: 16px;
     cursor: pointer;
+    color: #000000; /* Черные стрелочки */
+}
+
+.calendar-header button:hover {
+    color: #56595a;
+}
+
+.close-calendar {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.close-calendar:hover {
+    color: #56595a;
 }
 
 .calendar-days {
@@ -698,6 +722,7 @@ input[type="tel"]:focus {
     font-size: 20px;
     cursor: pointer;
     padding: 0 10px;
+    color: #000000; /* Черные стрелочки */
 }
 
 #prev-day:hover, #next-day:hover {
