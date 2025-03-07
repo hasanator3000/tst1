@@ -175,12 +175,7 @@ function prevStep() {
     updateConfirmButton();
 }
 
-// Сброс даты при закрытии модального окна
 function resetModal() {
-    selectedDate = new Date(); // Сбрасываем дату на текущую
-    updateDateDisplay(); // Обновляем отображение даты
-    renderCalendar(selectedDate); // Перерисовываем календарь
-
     document.getElementById('brand').selectedIndex = 0;
     document.getElementById('model').innerHTML = '<option value="">Выберите модель</option>';
     document.getElementById('model').disabled = true;
@@ -189,6 +184,11 @@ function resetModal() {
     servicesContainer.innerHTML = '';
 
     document.getElementById('total').textContent = '0₽';
+
+    selectedDate = new Date(); // Сбрасываем дату на текущую
+    updateDateDisplay(); // Обновляем отображение даты
+    renderCalendar(selectedDate); // Перерисовываем календарь
+
 
     const timeSlotsContainer = document.querySelector('.time-slots');
     timeSlotsContainer.innerHTML = '';
