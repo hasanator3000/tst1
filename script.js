@@ -60,44 +60,43 @@ function renderCalendar(date) {
     for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement('div');
         dayElement.textContent = day;
-        dayElement.addEventListener('click', () => selectDate(new Date(year, month, day)));
-        if (selectedDate && selectedDate.toDateString() === new Date(year, month, day).toDateString()) {
+        const dayDate = new Date(year, month, day);
+        dayElement.addEventListener('click', () => selectDate(dayDate));
+        
+        // Выделяем выбранную дату
+        if (selectedDate.toDateString() === dayDate.toDateString()) {
             dayElement.classList.add('selected');
         }
+        
         calendarGrid.appendChild(dayElement);
     }
 }
 
-// Функция для выбора даты
-function selectDate(date) {
-    selectedDate = date;
-    const currentDateElement = document.getElementById('current-date');
-    const currentDayElement = document.getElementById('current-day');
-    currentDateElement.textContent = date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-    currentDayElement.textContent = date.toLocaleDateString('ru-RU', { weekday: 'long' });
-    document.getElementById('calendar').style.display = 'none';
-    updateConfirmButton();
-}
-
-// Функция для изменения месяца
+// Функция для изменения месяца в календаре
 function changeMonth(offset) {
     currentDate.setMonth(currentDate.getMonth() + offset);
     renderCalendar(currentDate);
 }
 
+// Функция для выбора даты в календаре
+function selectDate(date) {
+    selectedDate = date; // Обновляем выбранную дату
+    updateDateDisplay(); // Обновляем отображение даты
+    renderCalendar(currentDate); // Перерисовываем календарь, чтобы выделить новую дату
+}
+
 // Инициализация календаря при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    selectedDate = new Date();
-    updateDateDisplay();
+    selectedDate = new Date(); // Устанавливаем текущую дату
+    updateDateDisplay(); // Обновляем отображение
+    renderCalendar(currentDate); // Рисуем календарь
 });
 
-// Функция для изменения дня
+// Функция для изменения дня с помощью стрелочек
 function changeDay(offset) {
-    if (!selectedDate) {
-        selectedDate = new Date(); // Инициализация, если selectedDate не задан
-    }
-    selectedDate.setDate(selectedDate.getDate() + offset); // Изменяем дату
+    selectedDate.setDate(selectedDate.getDate() + offset); // Изменяем выбранную дату
     updateDateDisplay(); // Обновляем отображение даты
+    renderCalendar(currentDate); // Перерисовываем календарь, чтобы выделить новую дату
 }
 
 
