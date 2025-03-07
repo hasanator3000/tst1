@@ -615,17 +615,24 @@ input[type="tel"]:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border: 2px solid #000000;
-    border-radius: 10px;
-    background-color: #eeeeee;
+    padding: 8px 12px; /* Уменьшенные отступы */
+    border: 1px solid #ccc; /* Минималистичная рамка */
+    border-radius: 6px;
+    background-color: #ffffff; /* Белый фон */
     cursor: pointer;
     font-size: 14px;
-    font-weight: bold;
+    font-weight: 500; /* Более легкий шрифт */
+    color: #333; /* Темный текст */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 #selected-date:hover {
-    background-color: #d9d9d9;
+    border-color: #000; /* Черная рамка при наведении */
+}
+
+#current-date, #current-day {
+    margin: 0; /* Убираем отступы */
 }
 
 #calendar {
@@ -633,10 +640,10 @@ input[type="tel"]:focus {
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    width: 280px; /* Уменьшенный размер */
+    width: 240px; /* Уменьшенный размер */
     background-color: #ffffff;
-    border: 2px solid #000000;
-    border-radius: 10px;
+    border: 1px solid #ccc; /* Минималистичная рамка */
+    border-radius: 6px;
     padding: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
@@ -658,6 +665,7 @@ input[type="tel"]:focus {
     font-size: 16px;
     cursor: pointer;
     color: #000000; /* Черные стрелочки */
+    padding: 0 5px; /* Уменьшенные отступы */
 }
 
 .calendar-header button:hover {
