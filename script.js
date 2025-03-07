@@ -14,18 +14,17 @@ function selectCalendarDay(dayElement, day) {
     toggleCalendar();
 }
 
+// Функция для генерации календаря
 function generateCalendar() {
     const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
                        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
     
-    const calendarGrid = document.querySelector('.calendar-grid');
+    const calendarGrid = document.querySelector('.calendar-days');
     calendarGrid.innerHTML = '';
 
     // Заголовок календаря
-    document.getElementById('calendar-month').innerHTML = `
-        <div>${monthNames[currentCalendarDate.getMonth()]}</div>
-        <div>${currentCalendarDate.getFullYear()}</div>
-    `;
+    document.getElementById('calendar-month').textContent = 
+        `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getFullYear()}`;
 
     // Дни месяца
     const lastDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0).getDate();
@@ -35,14 +34,20 @@ function generateCalendar() {
         dayElement.textContent = day;
         
         if (day === currentCalendarDate.getDate()) {
-            dayElement.classList.add('selected-day');
+            dayElement.classList.add('selected');
         }
 
-        dayElement.onclick = () => selectCalendarDay(dayElement, day);
+        dayElement.onclick = () => {
+            currentCalendarDate.setDate(day);
+            updateSelectedDate();
+            toggleCalendar(); // Закрываем календарь после выбора даты
+        };
+
         calendarGrid.appendChild(dayElement);
     }
 }
 
+// Функция для переключения календаря
 function toggleCalendar() {
     const calendar = document.getElementById('custom-calendar');
     isCalendarOpen = !isCalendarOpen;
@@ -54,7 +59,7 @@ function toggleCalendar() {
     }
 }
 
-// ИЗМЕНЕНО: Функция изменения дня стрелками
+// Функция для изменения дня стрелками
 function changeDay(offset) {
     if (!isCalendarOpen) {
         currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
@@ -62,9 +67,9 @@ function changeDay(offset) {
     }
 }
 
-// ИЗМЕНЕНО: Функция обновления отображения даты
+// Функция для обновления отображения даты
 function updateSelectedDate() {
-    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
     const dateString = currentCalendarDate.toLocaleDateString('ru-RU', options);
     document.getElementById('selected-date').textContent = dateString;
     updateTimeSlots();
@@ -123,8 +128,7 @@ function showStep(step) {
         setupStep4Listeners();
     }
 
-    // НОВОЕ: Инициализация календаря при открытии шага 3
-    if (step === 3) {
+     if (step === 3) {
         currentCalendarDate = new Date();
         updateSelectedDate();
     }
