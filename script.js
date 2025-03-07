@@ -27,8 +27,20 @@ function generateCalendar() {
         `${monthNames[currentCalendarDate.getMonth()]} ${currentCalendarDate.getFullYear()}`;
 
     // Дни месяца
-    const lastDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0).getDate();
-    for (let day = 1; day <= lastDay; day++) {
+    const firstDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth(), 1);
+    const lastDay = new Date(currentCalendarDate.getFullYear(), currentCalendarDate.getMonth() + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1; // Пн = 0, Вс = 6
+
+    // Пустые дни в начале месяца
+    for (let i = 0; i < startingDay; i++) {
+        const emptyDay = document.createElement('div');
+        emptyDay.className = 'calendar-day empty';
+        calendarGrid.appendChild(emptyDay);
+    }
+
+    // Дни месяца
+    for (let day = 1; day <= daysInMonth; day++) {
         const dayElement = document.createElement('div');
         dayElement.className = 'calendar-day';
         dayElement.textContent = day;
@@ -54,17 +66,14 @@ function toggleCalendar() {
     calendar.style.display = isCalendarOpen ? 'block' : 'none';
     
     if (isCalendarOpen) {
-        currentCalendarDate = new Date(document.getElementById('selected-date').dataset.date || new Date());
         generateCalendar();
     }
 }
 
 // Функция для изменения дня стрелками
 function changeDay(offset) {
-    if (!isCalendarOpen) {
-        currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
-        updateSelectedDate();
-    }
+    currentCalendarDate.setDate(currentCalendarDate.getDate() + offset);
+    updateSelectedDate();
 }
 
 // Функция для обновления отображения даты
@@ -74,6 +83,13 @@ function updateSelectedDate() {
     document.getElementById('selected-date').textContent = dateString;
     updateTimeSlots();
 }
+
+// Функция для изменения месяца в календаре
+function changeCalendarMonth(offset) {
+    currentCalendarDate.setMonth(currentCalendarDate.getMonth() + offset);
+    generateCalendar();
+}
+
 
 // ------------ Общие функции интерфейса ------------
 function toggleReadMore() {
