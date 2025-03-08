@@ -686,17 +686,22 @@ input[type="tel"]:focus {
     padding: 0 25px; /* Уменьшенные отступы */
 }
 
-.change-month {
+.change-month-left {
     background: none;
     border: none;
     font-size: 16px;
     cursor: pointer;
     color: #000000; /* Черные стрелочки */
-    padding: 0 40px; /* Уменьшенные отступы */
+    padding: 0 0 0 40px; /* Уменьшенные отступы */
 }
 
-.change:hover {
-    color: #56595a;
+.change-month-right {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #000000; /* Черные стрелочки */
+    padding: 0 40px 0 0; /* Уменьшенные отступы */
 }
 
 .calendar-days {
