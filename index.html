@@ -243,7 +243,7 @@
                 <select id="model" disabled>
                     <option value="">Выберите модель</option>
                 </select>
-                <button id="next1" disabled onclick="nextStep(2)">Подтвердить</button>
+                <button id="next1", class="next" disabled onclick="nextStep(2)">Подтвердить</button>
             </div>
 
             <!-- Шаг 2: Выбор услуг -->
@@ -251,7 +251,7 @@
                 <h2>Выбор услуг</h2>
                 <div id="services-container"></div>
                 <p>Подытог: <span id="total">0₽</span></p>
-                <button id="next2" disabled onclick="nextStep(3)">Подтвердить</button>
+                <button id="next2", class="next" disabled onclick="nextStep(3)">Подтвердить</button>
             </div>
 
          <!-- Шаг 3: Выбор даты и времени -->
@@ -290,7 +290,7 @@
 
             <!-- Блок выбора времени -->
             <div class="time-slots"></div>
-            <button id="next3" disabled onclick="nextStep(4)">Подтвердить</button>
+            <button id="next3", class="next" disabled onclick="nextStep(4)">Подтвердить</button>
         </div>
 
             <!-- Шаг 4: Ввод данных -->
@@ -299,13 +299,13 @@
                 <input type="text" id="clientName" placeholder="ФИО" oninput="validateName(this)">
                 <input type="tel" id="clientPhone" placeholder="Номер телефона" oninput="formatPhone(this)">
                 <input type="text" id="clientCarNumber" placeholder="Номер авто">
-                <button id="next4" disabled onclick="nextStep(5)">Подтвердить</button>
+                <button id="next4", class="next" disabled onclick="nextStep(5)">Подтвердить</button>
             </div>
 
             <!-- Шаг 5: Успешная запись -->
             <div id="step5" class="step" style="display: none;">
                 <h2>Вы успешно записались!</h2>
-                <button onclick="closeModal()">Закрыть</button>
+                <button class="next" onclick="closeModal()">Закрыть</button>
             </div>
         </div>
     </div>
