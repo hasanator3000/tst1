@@ -655,15 +655,19 @@ input[type="tel"]:focus {
 
 #close-calender {
     position: absolute;
-    right: 10px;
+    right: -10px;
     font-size: 16px;
     font-weight: bold;
     color: #000000;
     cursor: pointer;
     transition: color 0.3s ease;
-    border: none
-    padding: unset
+    border: none;
+    padding: unset;
+    top: -10px;
+    background: transparent; /* Убираем фон */
+    outline: none; /* Убираем outline при фокусе */
 }
+
 .calendar-header {
     display: flex;
     justify-content: space-between;
