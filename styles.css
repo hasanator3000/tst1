@@ -618,7 +618,6 @@ input[type="tel"]:focus {
     justify-content: space-between;
     align-items: center;
     padding: 8px 12px; /* Уменьшенные отступы */
-    border: 1px solid #ccc; /* Минималистичная рамка */
     border-radius: 6px;
     background-color: #ffffff; /* Белый фон */
     cursor: pointer;
@@ -654,6 +653,17 @@ input[type="tel"]:focus {
     display: none;
 }
 
+#close-calender {
+    position: absolute;
+    right: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    border: none
+    padding: unset
+}
 .calendar-header {
     display: flex;
     justify-content: space-between;
@@ -669,7 +679,7 @@ input[type="tel"]:focus {
     font-size: 16px;
     cursor: pointer;
     color: #000000; /* Черные стрелочки */
-    padding: 0 5px; /* Уменьшенные отступы */
+    padding: 0 25px; /* Уменьшенные отступы */
 }
 
 .change:hover {
