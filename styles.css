@@ -388,7 +388,7 @@ body {
 
 .time-slots {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 5px;
     width: 100%;
     max-width: 260px;
@@ -396,7 +396,7 @@ body {
 
 .time-slot {
     width: 100%;
-    padding: 10px;
+    padding: 10px 3px 10px 3px;
     margin: 5px 0;
     border: 2px solid #000000;
     border-radius: 10px;
@@ -655,7 +655,7 @@ input[type="tel"]:focus {
 
 #close-calender {
     position: absolute;
-    right: -10px;
+    right: 0px;
     font-size: 16px;
     font-weight: bold;
     color: #000000;
@@ -663,7 +663,7 @@ input[type="tel"]:focus {
     transition: color 0.3s ease;
     border: none;
     padding: unset;
-    top: -10px;
+    top: -5px;
     background: transparent; /* Убираем фон */
     outline: none; /* Убираем outline при фокусе */
 }
