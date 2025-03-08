@@ -686,6 +686,15 @@ input[type="tel"]:focus {
     padding: 0 25px; /* Уменьшенные отступы */
 }
 
+.change-month {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: #000000; /* Черные стрелочки */
+    padding: 0 40px; /* Уменьшенные отступы */
+}
+
 .change:hover {
     color: #56595a;
 }
